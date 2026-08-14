@@ -10,6 +10,10 @@ npx prisma generate
 npx prisma migrate deploy
 npm run build
 
+cp .env .next/standalone/.env
+cp -r .next/static .next/standalone/.next/static
+cp -r public .next/standalone/public
+
 pm2 reload mision-manizales --update-env
 
 sleep 2
