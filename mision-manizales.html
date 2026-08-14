@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misión Manizales — Lo que nos une, nos reconstruye</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul-esperanza:#00B4D8;
+    --amarillo-maiz:#F4C542;
+    --crema-masa:#F8F1E3;
+    --terracota:#C9724A;
+    --azul-profundo:#1E3A5F;
+    --verde-renacer:#6FA57A;
+    --ink:#20303f;
+    --radius:14px;
+    --shadow:0 10px 30px rgba(30,58,95,.12);
+    font-size:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    background:var(--crema-masa);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-.01em;
+    color:var(--azul-profundo);
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Work Sans',sans-serif; font-weight:600; font-size:.95rem;
+    padding:14px 26px; border-radius:999px; border:none; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--amarillo-maiz); color:#3a2a06; box-shadow:0 6px 18px rgba(244,197,66,.45);}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(244,197,66,.55);}
+  .btn-outline{background:transparent; border:1.5px solid var(--azul-profundo); color:var(--azul-profundo);}
+  .btn-outline:hover{background:var(--azul-profundo); color:#fff;}
+  .btn-ghost{background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.5);}
+  .btn-sm{padding:8px 16px; font-size:.82rem; border-radius:999px;}
+  .btn-danger{background:#fff; color:#b3432d; border:1.5px solid #e2b3a4;}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(248,241,227,.9); backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(30,58,95,.08);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 24px;}
+  .brand{display:flex; align-items:center; gap:12px; text-decoration:none;}
+  .brand img{width:42px; height:42px; border-radius:50%;}
+  .brand-name{font-family:'Fraunces',serif; font-weight:700; font-size:1.15rem; color:var(--azul-profundo); line-height:1.1;}
+  .brand-tag{font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--terracota); font-weight:600;}
+  .nav-links{display:flex; gap:26px; font-size:.9rem; font-weight:500; list-style:none;}
+  .nav-links a{text-decoration:none; opacity:.8;}
+  .nav-links a:hover{opacity:1; color:var(--terracota);}
+  .nav-cta{display:flex; gap:10px; align-items:center;}
+  .nav-toggle{display:none;}
+  @media(max-width:860px){
+    .nav-links{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative; overflow:hidden; background:var(--azul-profundo); color:#fff;}
+  .hero-media{position:relative; width:100%; aspect-ratio:16/8.2; background:linear-gradient(160deg,#122238,#1E3A5F 60%,#0f6c85);}
+  .hero-media iframe, .hero-media video{width:100%; height:100%; display:block; object-fit:cover;}
+  .hero-empty{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px; text-align:center; padding:20px;
+  }
+  .hero-empty .ring{width:70px; height:70px; border-radius:50%; border:2px dashed rgba(255,255,255,.5); display:flex; align-items:center; justify-content:center; font-size:1.6rem;}
+  .hero-overlay{
+    position:absolute; inset:0; background:linear-gradient(0deg, rgba(15,25,40,.88) 0%, rgba(15,25,40,.15) 55%, rgba(15,25,40,.05) 100%);
+    display:flex; align-items:flex-end; pointer-events:none;
+  }
+  .hero-copy{pointer-events:auto; padding:40px 24px 46px; max-width:1180px; margin:0 auto; width:100%;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; background:rgba(244,197,66,.16); border:1px solid rgba(244,197,66,.5);
+    color:var(--amarillo-maiz); padding:6px 14px; border-radius:999px; font-size:.75rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero-copy h1{font-size:clamp(2.1rem, 5vw, 3.6rem); color:#fff; line-height:1.06; max-width:820px;}
+  .hero-copy p{margin-top:16px; max-width:560px; color:rgba(255,255,255,.85); font-size:1.05rem;}
+  .hero-actions{display:flex; gap:14px; margin-top:28px; flex-wrap:wrap;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  section{padding:76px 0;}
+  .section-head{max-width:640px; margin-bottom:42px;}
+  .section-head .kicker{color:var(--terracota); font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px; display:block;}
+  .section-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem); line-height:1.15;}
+  .section-head p{margin-top:12px; color:#48586a; font-size:1.02rem;}
+
+  /* ---------- HISTORIA ---------- */
+  .historia{background:#fff;}
+  .historia-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:center;}
+  .historia-grid img{border-radius:22px; box-shadow:var(--shadow);}
+  .historia blockquote{
+    font-family:'Fraunces',serif; font-size:1.5rem; font-weight:500; color:var(--azul-profundo);
+    border-left:4px solid var(--amarillo-maiz); padding-left:20px; margin:22px 0;
+  }
+  @media(max-width:900px){.historia-grid{grid-template-columns:1fr;} .historia-grid .img-col{order:-1;}}
+
+  /* ---------- TERMOMETRO ---------- */
+  .termo-section{
+    background:radial-gradient(circle at 20% 20%, rgba(0,180,216,.12), transparent 55%), var(--crema-masa);
+  }
+  .termo-card{
+    background:#fff; border-radius:26px; box-shadow:var(--shadow); padding:44px; display:grid; grid-template-columns:220px 1fr; gap:48px; align-items:center;
+  }
+  .termo-tube-wrap{display:flex; flex-direction:column; align-items:center; gap:14px;}
+  .empanada-gauge{
+    position:relative; width:210px; aspect-ratio:57/73;
+    -webkit-mask-image:url('assets/empanada-grande.png'); mask-image:url('assets/empanada-grande.png');
+    -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center;
+    background:#e9ddc4;
+    filter:drop-shadow(0 10px 18px rgba(30,58,95,.22));
+  }
+  .empanada-gauge-fill{
+    position:absolute; left:0; right:0; bottom:0; height:0%;
+    background:linear-gradient(180deg, var(--amarillo-maiz) 0%, var(--terracota) 100%);
+    transition:height 1.1s cubic-bezier(.2,.8,.2,1);
+  }
+  .empanada-gauge-fill::after{
+    content:''; position:absolute; top:0; left:0; right:0; height:6px;
+    background:rgba(255,255,255,.55); filter:blur(1px);
+  }
+  .empanada-gauge-outline{
+    position:absolute; inset:0; background-image:url('assets/empanada-grande.png');
+    background-size:contain; background-repeat:no-repeat; background-position:center;
+    opacity:.16; filter:grayscale(1) contrast(1.4);
+    pointer-events:none;
+  }
+  .termo-goal-label{font-size:.75rem; color:#7a8896; text-align:center;}
+  .termo-info .amount-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .termo-info .raised{font-family:'Fraunces',serif; font-size:clamp(2rem,4vw,3rem); color:var(--terracota); font-weight:700;}
+  .termo-info .goal{font-family:'JetBrains Mono',monospace; color:#7a8896; font-size:1.05rem;}
+  .termo-bar-flat{height:14px; border-radius:999px; background:#eef1f5; margin:18px 0 10px; overflow:hidden;}
+  .termo-bar-flat-fill{height:100%; background:linear-gradient(90deg,var(--amarillo-maiz),var(--terracota)); border-radius:999px; transition:width 1s ease;}
+  .termo-stats{display:flex; gap:26px; margin-top:18px; flex-wrap:wrap;}
+  .termo-stats div{font-size:.85rem; color:#48586a;}
+  .termo-stats strong{display:block; font-family:'Fraunces',serif; font-size:1.3rem; color:var(--azul-profundo);}
+  @media(max-width:760px){.termo-card{grid-template-columns:1fr; text-align:center;} .termo-tube-wrap{margin:0 auto;} .termo-stats{justify-content:center;}}
+
+  /* ---------- BANNER ENCUENTROS ---------- */
+  .encuentros{background:var(--terracota); position:relative; overflow:hidden; padding:52px 0;}
+  .encuentros::before{
+    content:''; position:absolute; inset:0; background:radial-gradient(circle at 85% 0%, rgba(255,255,255,.14), transparent 55%);
+  }
+  .encuentros-head{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom:26px; position:relative;}
+  .encuentros-head h2{color:#fff; font-size:clamp(1.4rem,2.6vw,1.9rem);}
+  .encuentros-head .kicker{color:#fff2dd;}
+  .encuentros-head p{color:rgba(255,255,255,.85); margin-top:6px; max-width:460px;}
+  .encuentros-track{display:flex; gap:16px; overflow-x:auto; padding-bottom:6px; position:relative;}
+  .encuentro-card{
+    flex:0 0 260px; background:rgba(255,255,255,.98); border-radius:16px; padding:20px; box-shadow:0 12px 24px rgba(0,0,0,.18);
+  }
+  .encuentro-card .fecha{display:inline-block; background:var(--amarillo-maiz); color:#3a2a06; font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:999px; margin-bottom:10px;}
+  .encuentro-card h3{font-size:1rem; color:var(--azul-profundo); margin-bottom:4px;}
+  .encuentro-card .lugar{font-size:.78rem; color:var(--terracota); font-weight:600; margin-bottom:8px;}
+  .encuentro-card p{font-size:.84rem; color:#5a6875;}
+  .encuentros-empty{color:rgba(255,255,255,.8); border:1px dashed rgba(255,255,255,.4); border-radius:16px; padding:30px; text-align:center; flex:1;}
+
+  /* ---------- HISTORIAS DE APOYO (videos) ---------- */
+  .apoyo{background:var(--azul-profundo); color:#fff;}
+  .apoyo .section-head h2{color:#fff;}
+  .apoyo .section-head p{color:rgba(255,255,255,.7);}
+  .apoyo .kicker{color:var(--amarillo-maiz);}
+  .video-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .video-card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:18px; overflow:hidden;}
+  .video-frame{aspect-ratio:16/10; background:#0f1c2c; position:relative;}
+  .video-frame iframe{width:100%; height:100%; border:0;}
+  .video-empty{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.4); font-size:2rem;}
+  .video-card .body{padding:16px 18px 20px;}
+  .video-card h3{font-size:1.02rem; color:#fff; font-family:'Fraunces',serif; font-weight:600;}
+  .video-card p{font-size:.85rem; color:rgba(255,255,255,.65); margin-top:6px;}
+  .empty-state{text-align:center; padding:40px; color:rgba(255,255,255,.55); border:1px dashed rgba(255,255,255,.25); border-radius:18px; grid-column:1/-1;}
+  @media(max-width:900px){.video-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.video-grid{grid-template-columns:1fr;}}
+
+  /* ---------- ALIADOS ---------- */
+  .aliados{background:var(--crema-masa);}
+  .aliados-grid{display:flex; flex-wrap:wrap; gap:14px;}
+  .aliado-chip{
+    background:#fff; border:1px solid rgba(30,58,95,.1); padding:14px 22px; border-radius:14px;
+    font-family:'Fraunces',serif; font-weight:600; color:var(--azul-profundo); box-shadow:0 4px 10px rgba(30,58,95,.06);
+  }
+
+  /* ---------- TIENDA ---------- */
+  .tienda{background:#fff;}
+  .tienda-top{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap;}
+  .product-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:36px;}
+  .product-card{border:1px solid rgba(30,58,95,.1); border-radius:18px; overflow:hidden; background:var(--crema-masa); display:flex; flex-direction:column;}
+  .product-media{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; font-size:3rem; background:linear-gradient(160deg,#fff,#f1e9d8);}
+  .product-media img{width:100%; height:100%; object-fit:cover;}
+  .product-body{padding:16px 18px 20px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .product-body h3{font-size:1rem; font-family:'Fraunces',serif;}
+  .product-body p{font-size:.83rem; color:#5a6875; flex:1;}
+  .product-price{font-family:'JetBrains Mono',monospace; color:var(--terracota); font-weight:700; font-size:1.05rem;}
+  @media(max-width:960px){.product-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.product-grid{grid-template-columns:1fr;}}
+
+  .cart-fab{
+    position:fixed; bottom:26px; right:26px; z-index:60; background:var(--azul-profundo); color:#fff;
+    border-radius:999px; padding:14px 22px; box-shadow:0 12px 30px rgba(30,58,95,.35); display:flex; align-items:center; gap:10px;
+    border:none; cursor:pointer; font-weight:600;
+  }
+  .cart-badge{background:var(--amarillo-maiz); color:#3a2a06; border-radius:999px; padding:2px 8px; font-size:.75rem; font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:#152233; color:rgba(255,255,255,.75); padding:56px 0 30px; font-size:.88rem;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px;}
+  footer h4{color:#fff; font-family:'Fraunces',serif; font-size:1rem; margin-bottom:14px;}
+  footer .brand{margin-bottom:14px;}
+  footer .brand-name{color:#fff;}
+  footer ul{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  footer a{text-decoration:none; opacity:.85;}
+  footer a:hover{opacity:1;}
+  .footer-bottom{margin-top:40px; padding-top:20px; border-top:1px solid rgba(255,255,255,.1); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:.78rem; opacity:.6;}
+  @media(max-width:800px){.footer-grid{grid-template-columns:1fr;}}
+
+  /* ---------- MODAL / OVERLAY ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(15,25,40,.55); backdrop-filter:blur(3px);
+    display:none; align-items:flex-start; justify-content:center; z-index:100; padding:40px 16px; overflow-y:auto;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:#fff; border-radius:20px; max-width:560px; width:100%; padding:32px; box-shadow:0 30px 60px rgba(0,0,0,.3);
+    animation:pop .25s ease;
+  }
+  .modal.wide{max-width:760px;}
+  @keyframes pop{from{opacity:0; transform:translateY(12px) scale(.98);} to{opacity:1; transform:none;}}
+  .modal-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px;}
+  .modal-head h3{font-size:1.4rem;}
+  .close-x{background:none; border:none; font-size:1.4rem; cursor:pointer; color:#8a97a3; line-height:1;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:.82rem; font-weight:600; margin-bottom:6px; color:#3c4b5a;}
+  .field input, .field select, .field textarea{
+    width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid #e1e6ea; font-family:inherit; font-size:.92rem; background:#fbfaf7;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{outline:none; border-color:var(--azul-esperanza);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .amount-chips{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+  .chip{padding:10px 18px; border-radius:999px; border:1.5px solid #e1e6ea; background:#fff; cursor:pointer; font-weight:600; font-size:.88rem;}
+  .chip.active{background:var(--amarillo-maiz); border-color:var(--amarillo-maiz); color:#3a2a06;}
+  .check-row{display:flex; gap:10px; align-items:flex-start; margin-bottom:12px; font-size:.82rem; color:#3c4b5a;}
+  .check-row input{margin-top:3px;}
+  .pay-tabs{display:flex; gap:8px; margin-bottom:16px;}
+  .pay-tab{flex:1; padding:12px; border-radius:12px; border:1.5px solid #e1e6ea; background:#fff; cursor:pointer; font-weight:600; text-align:center; font-size:.88rem;}
+  .pay-tab.active{border-color:var(--azul-esperanza); background:rgba(0,180,216,.08); color:var(--azul-profundo);}
+  .pay-panel{border:1px dashed #d8dee3; border-radius:14px; padding:18px; font-size:.86rem; color:#4a5866; background:#fbfaf7;}
+  .pay-panel code{background:#eef1f5; padding:2px 6px; border-radius:6px; font-family:'JetBrains Mono',monospace;}
+  .note-small{font-size:.75rem; color:#8a97a3; margin-top:10px;}
+  .success-box{text-align:center; padding:20px 0;}
+  .success-box .check{font-size:3rem; margin-bottom:10px;}
+
+  /* ---------- ADMIN ---------- */
+  #admin-link{position:fixed; bottom:14px; left:14px; z-index:60; font-size:.7rem; color:#9aa7b1; opacity:.5; text-decoration:none;}
+  #admin-link:hover{opacity:1;}
+  .admin-shell{position:fixed; inset:0; background:var(--crema-masa); z-index:200; display:none; overflow-y:auto;}
+  .admin-shell.show{display:block;}
+  .admin-top{background:var(--azul-profundo); color:#fff; padding:16px 24px; display:flex; justify-content:space-between; align-items:center;}
+  .admin-top .b{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:700;}
+  .admin-login-wrap{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;}
+  .admin-login-card{background:#fff; border-radius:20px; padding:36px; max-width:380px; width:100%; box-shadow:var(--shadow);}
+  .admin-tabs{display:flex; gap:6px; padding:16px 24px 0; flex-wrap:wrap;}
+  .admin-tab{padding:10px 16px; border-radius:10px 10px 0 0; background:#eee2c8; cursor:pointer; font-weight:600; font-size:.85rem; color:#6b5a34;}
+  .admin-tab.active{background:#fff; color:var(--azul-profundo);}
+  .admin-panel{background:#fff; margin:0 24px 40px; border-radius:0 14px 14px 14px; padding:28px; box-shadow:var(--shadow);}
+  .admin-panel h3{margin-bottom:16px;}
+  .admin-row-list{display:flex; flex-direction:column; gap:10px; margin-bottom:20px;}
+  .admin-item{border:1px solid #e5e5e5; border-radius:12px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;}
+  .admin-item .meta{font-size:.8rem; color:#7a8896;}
+  table.admin-table{width:100%; border-collapse:collapse; font-size:.85rem;}
+  table.admin-table th, table.admin-table td{text-align:left; padding:10px 12px; border-bottom:1px solid #eee;}
+  table.admin-table th{color:#7a8896; font-weight:600; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em;}
+  .save-toast{position:fixed; bottom:20px; right:20px; background:var(--azul-profundo); color:#fff; padding:12px 20px; border-radius:10px; font-size:.85rem; z-index:300; opacity:0; transform:translateY(10px); transition:all .25s ease; pointer-events:none;}
+  .save-toast.show{opacity:1; transform:none;}
+  .grid-form{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .full{grid-column:1/-1;}
+  .err{color:#b3432d; font-size:.8rem; margin-top:8px;}
+
+  ::selection{background:var(--amarillo-maiz); color:#3a2a06;}
+</style>
+</head>
+<body>
+
+<!-- =============== NAV =============== -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#inicio" class="brand">
+      <img src="assets/logo-catedral.png" alt="Sello Misión Manizales">
+      <span>
+        <span class="brand-name">Misión Manizales</span><br>
+        <span class="brand-tag">Lo que nos une, nos reconstruye</span>
+      </span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#historia">Historia</a></li>
+      <li><a href="#apoya">Recaudo</a></li>
+      <li><a href="#videos">Historias</a></li>
+      <li><a href="#aliados">Aliados</a></li>
+      <li><a href="#tienda">Tienda</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-primary btn-sm" onclick="openDonar()">Donar ahora</button>
+    </div>
+  </div>
+</header>
+
+<!-- =============== HERO =============== -->
+<section class="hero" id="inicio" style="padding:0;">
+  <div class="hero-media" id="hero-media"></div>
+  <div class="hero-overlay">
+    <div class="hero-copy">
+      <span class="eyebrow">🫓 Manizales se reconstruye entre todos</span>
+      <h1>Una empanada es un gesto.<br>Miles de gestos reconstruyen una ciudad.</h1>
+      <p>Hace un siglo fue el incendio. En los noventa, un terremoto tumbó los santos de la Catedral. Hoy volvemos a esa memoria: pequeños aportes compartidos que levantan a Manizales.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="openDonar()">Quiero aportar</button>
+        <a href="#apoya" class="btn btn-ghost">Ver el avance del recaudo ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== HISTORIA / INSIGHT =============== -->
+<section class="historia" id="historia">
+  <div class="wrap historia-grid">
+    <div>
+      <span class="kicker" style="color:var(--terracota); font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; display:block; margin-bottom:10px;">Verdad de marca</span>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:16px;">La reconstrucción no empieza con una gran obra.</h2>
+      <blockquote>Empieza cuando todos deciden aportar algo.</blockquote>
+      <p style="color:#48586a; margin-top:10px;">Hace cien años, tras el incendio de la ciudad, Manizales se reconstruyó «a punta de empanadas». En los años noventa, tras el terremoto que tumbó los santos de la Catedral, los convites y las empanadas volvieron a ser el espíritu colectivo de reconstrucción. Hoy retomamos esa tradición para convertirla en un símbolo contemporáneo de esperanza.</p>
+      <p style="margin-top:14px; font-weight:600; color:var(--azul-profundo);">Manizales ya sabe levantarse unida.</p>
+    </div>
+    <div class="img-col">
+      <img src="assets/logo-catedral.png" alt="Catedral Basílica de Manizales" style="max-width:340px; margin:0 auto;">
+    </div>
+  </div>
+</section>
+
+<!-- =============== TERMÓMETRO =============== -->
+<section class="termo-section" id="apoya">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Recaudo en vivo</span>
+      <h2>El termómetro de la reconstrucción</h2>
+      <p>Cada aporte suma. Así vamos frente a la meta de USD 1.000.000 para reconstruir viviendas y, en la fase final, aportar al restablecimiento de la Catedral.</p>
+    </div>
+
+    <div class="termo-card">
+      <div class="termo-tube-wrap">
+        <div class="empanada-gauge">
+          <div class="empanada-gauge-fill" id="termo-fill"></div>
+        </div>
+        <span class="termo-goal-label">Meta: <strong class="mono" id="termo-goal-label">USD 1.000.000</strong></span>
+      </div>
+
+      <div class="termo-info">
+        <div class="amount-row">
+          <span class="raised mono" id="raised-amount">USD 0</span>
+          <span class="goal">de USD <span id="goal-amount-inline">1.000.000</span> · <span id="pct-label">0%</span></span>
+        </div>
+        <div class="termo-bar-flat"><div class="termo-bar-flat-fill" id="termo-bar-flat-fill" style="width:0%"></div></div>
+        <div class="termo-stats">
+          <div><strong id="stat-donaciones">0</strong>Donaciones registradas</div>
+          <div><strong>Fase 1</strong>Dolor y respuesta</div>
+          <div><strong>Fase 4</strong>Legado</div>
+        </div>
+        <div style="margin-top:22px;">
+          <button class="btn btn-primary" onclick="openDonar()">🫓 Aportar mi empanada</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== BANNER ENCUENTROS =============== -->
+<section class="encuentros" id="encuentros">
+  <div class="wrap">
+    <div class="encuentros-head">
+      <div>
+        <span class="kicker">Agenda ciudadana</span>
+        <h2>Próximos encuentros y acciones</h2>
+        <p>Convites, ferias y activaciones donde puedes sumarte en persona.</p>
+      </div>
+    </div>
+    <div class="encuentros-track" id="encuentros-track"></div>
+  </div>
+</section>
+
+<!-- =============== HISTORIAS / VIDEOS =============== -->
+<section class="apoyo" id="videos">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Rostros de la reconstrucción</span>
+      <h2>Historias y causas que estamos apoyando</h2>
+      <p>Familias, comerciantes y proyectos que reciben ayuda directa de Misión Manizales.</p>
+    </div>
+    <div class="video-grid" id="video-grid"></div>
+  </div>
+</section>
+
+<!-- =============== ALIADOS =============== -->
+<section class="aliados" id="aliados">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Empresas y gremios</span>
+      <h2>Aliados que ya se suman</h2>
+      <p>Compañías y organizaciones que apoyan a Misión Manizales.</p>
+    </div>
+    <div class="aliados-grid" id="aliados-grid"></div>
+  </div>
+</section>
+
+<!-- =============== TIENDA =============== -->
+<section class="tienda" id="tienda">
+  <div class="wrap">
+    <div class="tienda-top">
+      <div class="section-head" style="margin-bottom:0;">
+        <span class="kicker">Merch solidario</span>
+        <h2>Tienda Misión Manizales</h2>
+        <p>Cada producto es también un aporte a la reconstrucción.</p>
+      </div>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+  </div>
+</section>
+
+<!-- =============== FOOTER =============== -->
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="brand">
+        <img src="assets/logo-catedral.png" alt="Misión Manizales" style="width:46px; height:46px; border-radius:50%; display:inline-block; vertical-align:middle; margin-right:10px;">
+        <span class="brand-name" style="font-size:1.1rem;">Misión Manizales</span>
+      </div>
+      <p style="max-width:320px;">Marca ciudadana, neutral y de largo plazo para reconstruir Manizales, un gesto a la vez.</p>
+    </div>
+    <div>
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#historia">Historia</a></li>
+        <li><a href="#apoya">Recaudo</a></li>
+        <li><a href="#videos">Historias</a></li>
+        <li><a href="#tienda">Tienda</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Misión Manizales es de todos</h4>
+      <ul>
+        <li>Manizales, Caldas — Colombia</li>
+        <li>hola@misionmanizales.org</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© 2026 Misión Manizales · Lo que nos une, nos reconstruye</span>
+    <a href="#" id="admin-link-footer" onclick="openAdmin(event)" style="opacity:.6;">Panel administrativo</a>
+  </div>
+</footer>
+
+<a href="#" id="admin-link" onclick="openAdmin(event)">admin</a>
+
+<!-- =============== CART FAB =============== -->
+<button class="cart-fab" id="cart-fab" onclick="openCart()" style="display:none;">
+  🛍️ Carrito <span class="cart-badge" id="cart-count">0</span>
+</button>
+
+<!-- =============== MODAL: DONAR =============== -->
+<div class="overlay" id="overlay-donar">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Aportar a la reconstrucción</h3>
+      <button class="close-x" onclick="closeModal('overlay-donar')">✕</button>
+    </div>
+    <div id="donar-step-form">
+      <label style="font-size:.82rem; font-weight:600; color:#3c4b5a;">Monto a donar (USD)</label>
+      <div class="amount-chips" id="amount-chips" style="margin-top:8px;">
+        <div class="chip" data-amount="10">10</div>
+        <div class="chip" data-amount="25">25</div>
+        <div class="chip" data-amount="50">50</div>
+        <div class="chip" data-amount="100">100</div>
+        <div class="chip" data-amount="custom">Otro</div>
+      </div>
+      <div class="field" id="custom-amount-field" style="display:none;">
+        <input type="number" id="custom-amount" placeholder="Monto en USD" min="1">
+      </div>
+
+      <p class="note-small" style="margin:2px 0 12px;">Estos datos se usan únicamente para la trazabilidad de tu donación (identificarla, confirmarla y, si aplica, certificarla).</p>
+      <div class="row2">
+        <div class="field"><label>Tipo de documento</label>
+          <select id="don-tipo-doc">
+            <option value="CC">Cédula de ciudadanía</option>
+            <option value="CE">Cédula de extranjería</option>
+            <option value="PA">Pasaporte</option>
+            <option value="NIT">NIT</option>
+            <option value="TI">Tarjeta de identidad</option>
+          </select>
+        </div>
+        <div class="field"><label>Número de documento</label><input type="text" id="don-num-doc" placeholder="Número de documento"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Nombre completo</label><input type="text" id="don-nombre" placeholder="Tu nombre"></div>
+        <div class="field"><label>Teléfono</label><input type="tel" id="don-telefono" placeholder="+57 300 000 0000"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Correo electrónico</label><input type="email" id="don-correo" placeholder="tucorreo@ejemplo.com"></div>
+        <div class="field"><label>Dirección</label><input type="text" id="don-direccion" placeholder="Ciudad, dirección"></div>
+      </div>
+
+      <div class="pay-tabs">
+        <div class="pay-tab active" data-pay="paypal" onclick="setPayTab('paypal')">PayPal</div>
+        <div class="pay-tab" data-pay="banco" onclick="setPayTab('banco')">Transferencia bancaria</div>
+      </div>
+      <div class="pay-panel" id="pay-panel-paypal">
+        Serás dirigido a PayPal para completar tu donación de forma segura.
+        <div id="paypal-configured-note" style="margin-top:8px; color:#8a97a3;">El enlace de PayPal aún no ha sido configurado por el administrador.</div>
+      </div>
+      <div class="pay-panel" id="pay-panel-banco" style="display:none;">
+        Realiza tu transferencia y conserva tu comprobante:
+        <div id="banco-datos" style="margin-top:8px;">El administrador aún no ha configurado los datos bancarios.</div>
+      </div>
+
+      <div class="check-row" style="margin-top:16px;">
+        <input type="checkbox" id="chk-datos">
+        <label for="chk-datos">Autorizo el tratamiento de mis datos personales para fines de trazabilidad de mi donación, conforme a la Ley 1581 de 2012 y la política de tratamiento de datos de Misión Manizales.</label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="chk-licito">
+        <label for="chk-licito">Declaro bajo la gravedad de juramento que los recursos de esta donación provienen de una actividad lícita.</label>
+      </div>
+      <p class="err" id="donar-error" style="display:none;"></p>
+      <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;" onclick="submitDonacion()">Confirmar donación</button>
+      <p class="note-small">Esta es una interfaz de demostración: la confirmación registra tu intención de donar. El cobro real se procesa a través del proveedor de pagos configurado (PayPal / banco).</p>
+    </div>
+    <div id="donar-step-success" style="display:none;">
+      <div class="success-box">
+        <div class="check">🫓✅</div>
+        <h3>¡Gracias por tu aporte!</h3>
+        <p style="color:#5a6875; margin-top:8px;">Tu gesto ya suma en el termómetro de Misión Manizales.</p>
+        <button class="btn btn-outline" style="margin-top:20px;" onclick="closeModal('overlay-donar')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============== MODAL: CARRITO / CHECKOUT =============== -->
+<div class="overlay" id="overlay-cart">
+  <div class="modal wide">
+    <div class="modal-head">
+      <h3>Tu carrito</h3>
+      <button class="close-x" onclick="closeModal('overlay-cart')">✕</button>
+    </div>
+    <div id="cart-body"></div>
+  </div>
+</div>
+
+<!-- =============== ADMIN SHELL =============== -->
+<div class="admin-shell" id="admin-shell">
+  <div id="admin-login-view" class="admin-login-wrap">
+    <div class="admin-login-card">
+      <h3 style="margin-bottom:6px;">Panel administrativo</h3>
+      <p style="color:#7a8896; font-size:.85rem; margin-bottom:20px;">Misión Manizales — acceso restringido</p>
+      <div class="field"><label>Usuario</label><input type="text" id="admin-user" placeholder="Usuario"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="admin-pass" placeholder="Contraseña"></div>
+      <p class="err" id="admin-login-error" style="display:none;">Usuario o contraseña incorrectos.</p>
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="adminLogin()">Ingresar</button>
+      <button class="btn btn-outline" style="width:100%; justify-content:center; margin-top:10px;" onclick="closeAdmin()">Volver al sitio</button>
+    </div>
+  </div>
+
+  <div id="admin-dashboard-view" style="display:none;">
+    <div class="admin-top">
+      <div class="b">⚙️ Misión Manizales · Admin</div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-ghost btn-sm" onclick="closeAdmin()">Ver sitio</button>
+        <button class="btn btn-ghost btn-sm" onclick="adminLogout()">Cerrar sesión</button>
+      </div>
+    </div>
+    <div class="admin-tabs">
+      <div class="admin-tab active" data-tab="general" onclick="setAdminTab('general')">General</div>
+      <div class="admin-tab" data-tab="historias" onclick="setAdminTab('historias')">Historias / Videos</div>
+      <div class="admin-tab" data-tab="aliados" onclick="setAdminTab('aliados')">Aliados</div>
+      <div class="admin-tab" data-tab="eventos" onclick="setAdminTab('eventos')">Encuentros</div>
+      <div class="admin-tab" data-tab="tienda" onclick="setAdminTab('tienda')">Tienda</div>
+      <div class="admin-tab" data-tab="pagos" onclick="setAdminTab('pagos')">Pagos</div>
+      <div class="admin-tab" data-tab="donaciones" onclick="setAdminTab('donaciones')">Donaciones</div>
+      <div class="admin-tab" data-tab="pedidos" onclick="setAdminTab('pedidos')">Pedidos tienda</div>
+    </div>
+    <div class="admin-panel" id="admin-panel"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="save-toast">Guardado ✓</div>
+
+<script>
+/* ==============================================================
+   ESTADO Y PERSISTENCIA (window.storage)
+   ============================================================== */
+const CONTENT_KEY = 'site-content';
+const DONACIONES_KEY = 'donaciones-log';
+const PEDIDOS_KEY = 'pedidos-log';
+
+const DEFAULT_CONTENT = {
+  heroVideoUrl: "",
+  thermometer: { goal: 1000000, raised: 0 },
+  historias: [],
+  aliados: [],
+  productos: [],
+  eventos: [],
+  paypalLink: "",
+  banco: { banco:"", tipoCuenta:"", numeroCuenta:"", titular:"", nit:"" }
+};
+
+let content = JSON.parse(JSON.stringify(DEFAULT_CONTENT));
+let donaciones = [];
+let pedidos = [];
+let isAdmin = false;
+let cart = [];
+let selectedAmount = 25;
+let payTab = 'paypal';
+let checkoutPayTab = 'paypal';
+
+async function loadAll(){
+  try{
+    const c = await window.storage.get(CONTENT_KEY, true);
+    if(c && c.value) content = { ...DEFAULT_CONTENT, ...JSON.parse(c.value) };
+  }catch(e){ /* no existing content yet */ }
+  try{
+    const d = await window.storage.get(DONACIONES_KEY, true);
+    if(d && d.value) donaciones = JSON.parse(d.value);
+  }catch(e){ donaciones = []; }
+  try{
+    const p = await window.storage.get(PEDIDOS_KEY, true);
+    if(p && p.value) pedidos = JSON.parse(p.value);
+  }catch(e){ pedidos = []; }
+  renderAll();
+}
+
+async function saveContent(){
+  try{ await window.storage.set(CONTENT_KEY, JSON.stringify(content), true); toast('Guardado ✓'); }
+  catch(e){ toast('No se pudo guardar'); }
+}
+async function saveDonaciones(){
+  try{ await window.storage.set(DONACIONES_KEY, JSON.stringify(donaciones), true); }
+  catch(e){ console.error(e); }
+}
+async function savePedidos(){
+  try{ await window.storage.set(PEDIDOS_KEY, JSON.stringify(pedidos), true); }
+  catch(e){ console.error(e); }
+}
+
+function toast(msg){
+  const t = document.getElementById('save-toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+function uid(){ return Math.random().toString(36).slice(2,10); }
+function fmtUSD(n){ return 'USD ' + Number(n||0).toLocaleString('en-US'); }
+
+/* ==============================================================
+   RENDER: HERO
+   ============================================================== */
+function youtubeEmbed(url){
+  if(!url) return null;
+  let id = null;
+  const m1 = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/)([\w-]{6,})/);
+  if(m1) id = m1[1];
+  if(id) return `https://www.youtube.com/embed/${id}`;
+  const v = url.match(/vimeo\.com\/(\d+)/);
+  if(v) return `https://player.vimeo.com/video/${v[1]}`;
+  return url;
+}
+function renderHero(){
+  const el = document.getElementById('hero-media');
+  const embed = youtubeEmbed(content.heroVideoUrl);
+  if(embed){
+    el.innerHTML = `<iframe src="${embed}" title="Video Misión Manizales" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    el.innerHTML = `<div class="hero-empty"><div class="ring">🎬</div><div>Video de campaña próximamente<br><span style="opacity:.6; font-size:.8rem;">Configúralo desde el panel administrativo</span></div></div>`;
+  }
+}
+
+/* ==============================================================
+   RENDER: TERMÓMETRO
+   ============================================================== */
+function renderTermometro(){
+  const goal = content.thermometer.goal || 1;
+  const raised = content.thermometer.raised || 0;
+  const pct = Math.max(0, Math.min(100, (raised/goal)*100));
+  document.getElementById('termo-fill').style.height = pct + '%';
+  document.getElementById('termo-bar-flat-fill').style.width = pct + '%';
+  document.getElementById('raised-amount').textContent = fmtUSD(raised);
+  document.getElementById('goal-amount-inline').textContent = Number(goal).toLocaleString('en-US');
+  document.getElementById('termo-goal-label').textContent = fmtUSD(goal);
+  document.getElementById('pct-label').textContent = pct.toFixed(1) + '%';
+  document.getElementById('stat-donaciones').textContent = donaciones.length;
+}
+
+/* ==============================================================
+   RENDER: VIDEOS / HISTORIAS
+   ============================================================== */
+function renderHistorias(){
+  const grid = document.getElementById('video-grid');
+  if(!content.historias.length){
+    grid.innerHTML = `<div class="empty-state">Aún no hay historias publicadas.<br>El equipo administrativo puede agregarlas desde el panel.</div>`;
+    return;
+  }
+  grid.innerHTML = content.historias.map(h => {
+    const embed = youtubeEmbed(h.videoUrl);
+    return `<div class="video-card">
+      <div class="video-frame">
+        ${embed ? `<iframe src="${embed}" allowfullscreen></iframe>` : `<div class="video-empty">🎥</div>`}
+      </div>
+      <div class="body">
+        <h3>${escapeHtml(h.titulo||'Historia')}</h3>
+        <p>${escapeHtml(h.descripcion||'')}</p>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ==============================================================
+   RENDER: ALIADOS
+   ============================================================== */
+function renderAliados(){
+  const grid = document.getElementById('aliados-grid');
+  if(!content.aliados.length){
+    grid.innerHTML = `<div class="empty-state" style="width:100%;">Aún no hay aliados publicados.</div>`;
+    return;
+  }
+  grid.innerHTML = content.aliados.map(a => `<div class="aliado-chip">${escapeHtml(a.nombre)}</div>`).join('');
+}
+
+/* ==============================================================
+   RENDER: TIENDA
+   ============================================================== */
+function renderTienda(){
+  const grid = document.getElementById('product-grid');
+  if(!content.productos.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1; color:#8a97a3; border-color:#ddd;">Aún no hay productos publicados. Se agregarán pronto desde el panel administrativo.</div>`;
+    return;
+  }
+  grid.innerHTML = content.productos.map(p => `
+    <div class="product-card">
+      <div class="product-media">${p.imagen ? `<img src="${p.imagen}" alt="${escapeHtml(p.nombre)}">` : (p.emoji || '🛍️')}</div>
+      <div class="product-body">
+        <h3>${escapeHtml(p.nombre)}</h3>
+        <p>${escapeHtml(p.descripcion||'')}</p>
+        <div class="product-price">${fmtUSD(p.precio)}</div>
+        <button class="btn btn-outline btn-sm" style="margin-top:6px;" onclick="addToCart('${p.id}')">Agregar al carrito</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ==============================================================
+   RENDER: ENCUENTROS
+   ============================================================== */
+function renderEncuentros(){
+  const track = document.getElementById('encuentros-track');
+  if(!content.eventos.length){
+    track.innerHTML = `<div class="encuentros-empty">Aún no hay encuentros publicados. El equipo administrativo puede agregarlos desde el panel.</div>`;
+    return;
+  }
+  track.innerHTML = content.eventos.map(ev => `
+    <div class="encuentro-card">
+      ${ev.fecha ? `<span class="fecha">${escapeHtml(ev.fecha)}</span>` : ''}
+      <h3>${escapeHtml(ev.titulo)}</h3>
+      ${ev.lugar ? `<div class="lugar">📍 ${escapeHtml(ev.lugar)}</div>` : ''}
+      <p>${escapeHtml(ev.descripcion||'')}</p>
+    </div>`).join('');
+}
+
+function renderAll(){
+  renderHero(); renderTermometro(); renderHistorias(); renderAliados(); renderTienda(); renderCartFab();
+  renderPayInfo(); renderEncuentros();
+}
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ==============================================================
+   MODALES GENERALES
+   ============================================================== */
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target === o) o.classList.remove('show'); });
+});
+
+/* ==============================================================
+   DONAR
+   ============================================================== */
+function openDonar(){
+  document.getElementById('donar-step-form').style.display = 'block';
+  document.getElementById('donar-step-success').style.display = 'none';
+  document.getElementById('overlay-donar').classList.add('show');
+}
+document.getElementById('amount-chips').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#amount-chips .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  const val = chip.dataset.amount;
+  const customField = document.getElementById('custom-amount-field');
+  if(val === 'custom'){ customField.style.display='block'; selectedAmount = null; }
+  else { customField.style.display='none'; selectedAmount = Number(val); }
+});
+function setPayTab(tab){
+  payTab = tab;
+  document.querySelectorAll('#donar-step-form .pay-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`#donar-step-form .pay-tab[data-pay="${tab}"]`).classList.add('active');
+  document.getElementById('pay-panel-paypal').style.display = tab==='paypal' ? 'block':'none';
+  document.getElementById('pay-panel-banco').style.display = tab==='banco' ? 'block':'none';
+}
+function renderPayInfo(){
+  const ppNote = document.getElementById('paypal-configured-note');
+  if(content.paypalLink){
+    ppNote.innerHTML = `Enlace configurado: <a href="${content.paypalLink}" target="_blank" style="color:var(--azul-esperanza); font-weight:600;">${content.paypalLink}</a>`;
+  } else {
+    ppNote.textContent = 'El enlace de PayPal aún no ha sido configurado por el administrador.';
+  }
+  const bd = document.getElementById('banco-datos');
+  const b = content.banco;
+  if(b && (b.numeroCuenta || b.banco)){
+    bd.innerHTML = `<strong>${escapeHtml(b.banco||'')}</strong> · ${escapeHtml(b.tipoCuenta||'')}<br>
+      Cuenta: <code>${escapeHtml(b.numeroCuenta||'')}</code><br>
+      Titular: ${escapeHtml(b.titular||'')} ${b.nit? '· NIT '+escapeHtml(b.nit):''}`;
+  } else {
+    bd.textContent = 'El administrador aún no ha configurado los datos bancarios.';
+  }
+}
+async function submitDonacion(){
+  const errEl = document.getElementById('donar-error');
+  errEl.style.display='none';
+  const tipoDocumento = document.getElementById('don-tipo-doc').value;
+  const numeroDocumento = document.getElementById('don-num-doc').value.trim();
+  const nombre = document.getElementById('don-nombre').value.trim();
+  const telefono = document.getElementById('don-telefono').value.trim();
+  const correo = document.getElementById('don-correo').value.trim();
+  const direccion = document.getElementById('don-direccion').value.trim();
+  const custom = document.getElementById('custom-amount').value;
+  const monto = selectedAmount || Number(custom);
+  const chkDatos = document.getElementById('chk-datos').checked;
+  const chkLicito = document.getElementById('chk-licito').checked;
+
+  if(!numeroDocumento || !nombre || !telefono || !correo || !direccion){ errEl.textContent='Por favor completa todos tus datos, incluido el documento de identidad.'; errEl.style.display='block'; return; }
+  if(!monto || monto <= 0){ errEl.textContent='Selecciona o escribe un monto válido.'; errEl.style.display='block'; return; }
+  if(!chkDatos){ errEl.textContent='Debes autorizar el tratamiento de datos personales.'; errEl.style.display='block'; return; }
+  if(!chkLicito){ errEl.textContent='Debes aceptar la declaración de origen lícito de los recursos.'; errEl.style.display='block'; return; }
+
+  const registro = {
+    id: uid(), fecha: new Date().toISOString(), tipoDocumento, numeroDocumento, nombre, telefono, correo, direccion,
+    monto, metodo: payTab, autorizaDatos:true, declaraOrigenLicito:true
+  };
+  donaciones.unshift(registro);
+  content.thermometer.raised = (content.thermometer.raised||0) + monto;
+  await saveDonaciones();
+  await saveContent();
+  renderTermometro();
+
+  if(payTab === 'paypal' && content.paypalLink){
+    window.open(content.paypalLink, '_blank');
+  }
+
+  document.getElementById('donar-step-form').style.display='none';
+  document.getElementById('donar-step-success').style.display='block';
+}
+
+/* ==============================================================
+   CARRITO / TIENDA
+   ============================================================== */
+function renderCartFab(){
+  const fab = document.getElementById('cart-fab');
+  const count = cart.reduce((a,i)=>a+i.cantidad,0);
+  document.getElementById('cart-count').textContent = count;
+  fab.style.display = count>0 ? 'flex':'none';
+}
+function addToCart(productoId){
+  const p = content.productos.find(x=>x.id===productoId); if(!p) return;
+  const existing = cart.find(i=>i.productoId===productoId);
+  if(existing) existing.cantidad += 1;
+  else cart.push({ productoId, nombre:p.nombre, precio:p.precio, cantidad:1 });
+  renderCartFab();
+  toast('Agregado al carrito');
+}
+function openCart(){ renderCartModal(); document.getElementById('overlay-cart').classList.add('show'); }
+function cartTotal(){ return cart.reduce((a,i)=>a+i.precio*i.cantidad,0); }
+function renderCartModal(){
+  const body = document.getElementById('cart-body');
+  if(!cart.length){
+    body.innerHTML = `<p style="color:#7a8896;">Tu carrito está vacío.</p>`;
+    return;
+  }
+  body.innerHTML = `
+    <div style="margin-bottom:20px;">
+      ${cart.map(i=>`
+        <div class="admin-item">
+          <div><strong>${escapeHtml(i.nombre)}</strong><div class="meta">${fmtUSD(i.precio)} c/u</div></div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="changeQty('${i.productoId}',-1)">−</button>
+            <span class="mono">${i.cantidad}</span>
+            <button class="btn btn-outline btn-sm" onclick="changeQty('${i.productoId}',1)">+</button>
+            <span class="mono" style="min-width:80px; text-align:right;">${fmtUSD(i.precio*i.cantidad)}</span>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:20px; font-size:1.1rem;">
+      <span>Total</span><span class="mono">${fmtUSD(cartTotal())}</span>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Nombre completo</label><input type="text" id="cart-nombre"></div>
+      <div class="field"><label>Teléfono</label><input type="tel" id="cart-telefono"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Correo electrónico</label><input type="email" id="cart-correo"></div>
+      <div class="field"><label>Dirección de envío</label><input type="text" id="cart-direccion"></div>
+    </div>
+    <div class="pay-tabs">
+      <div class="pay-tab ${checkoutPayTab==='paypal'?'active':''}" onclick="setCheckoutPayTab('paypal')">PayPal</div>
+      <div class="pay-tab ${checkoutPayTab==='banco'?'active':''}" onclick="setCheckoutPayTab('banco')">Transferencia bancaria</div>
+    </div>
+    <div class="check-row"><input type="checkbox" id="cart-chk-datos"><label for="cart-chk-datos">Autorizo el tratamiento de mis datos personales conforme a la Ley 1581 de 2012.</label></div>
+    <p class="err" id="cart-error" style="display:none;"></p>
+    <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="submitPedido()">Confirmar compra</button>
+  `;
+}
+function changeQty(productoId, delta){
+  const item = cart.find(i=>i.productoId===productoId); if(!item) return;
+  item.cantidad += delta;
+  if(item.cantidad<=0) cart = cart.filter(i=>i.productoId!==productoId);
+  renderCartFab(); renderCartModal();
+}
+function setCheckoutPayTab(tab){ checkoutPayTab = tab; renderCartModal(); }
+async function submitPedido(){
+  const errEl = document.getElementById('cart-error');
+  const nombre = document.getElementById('cart-nombre').value.trim();
+  const telefono = document.getElementById('cart-telefono').value.trim();
+  const correo = document.getElementById('cart-correo').value.trim();
+  const direccion = document.getElementById('cart-direccion').value.trim();
+  const chk = document.getElementById('cart-chk-datos').checked;
+  if(!nombre||!telefono||!correo||!direccion){ errEl.textContent='Completa tus datos de envío.'; errEl.style.display='block'; return; }
+  if(!chk){ errEl.textContent='Debes autorizar el tratamiento de datos personales.'; errEl.style.display='block'; return; }
+
+  const pedido = { id: uid(), fecha:new Date().toISOString(), nombre, telefono, correo, direccion, items:[...cart], total:cartTotal(), metodo:checkoutPayTab };
+  pedidos.unshift(pedido);
+  await savePedidos();
+  if(checkoutPayTab==='paypal' && content.paypalLink) window.open(content.paypalLink,'_blank');
+  cart = [];
+  renderCartFab();
+  document.getElementById('cart-body').innerHTML = `<div class="success-box"><div class="check">🛍️✅</div><h3>¡Compra registrada!</h3><p style="color:#5a6875;">Gracias por apoyar a Misión Manizales.</p><button class="btn btn-outline" style="margin-top:16px;" onclick="closeModal('overlay-cart')">Cerrar</button></div>`;
+}
+
+/* ==============================================================
+   ADMIN
+   ============================================================== */
+function openAdmin(e){ if(e) e.preventDefault(); document.getElementById('admin-shell').classList.add('show'); }
+function closeAdmin(){ document.getElementById('admin-shell').classList.remove('show'); }
+function adminLogin(){
+  const u = document.getElementById('admin-user').value;
+  const p = document.getElementById('admin-pass').value;
+  const errEl = document.getElementById('admin-login-error');
+  if(u === 'ManizalesAdmin' && p === 'Comparte2026'){
+    isAdmin = true;
+    document.getElementById('admin-login-view').style.display='none';
+    document.getElementById('admin-dashboard-view').style.display='block';
+    setAdminTab('general');
+  } else {
+    errEl.style.display='block';
+  }
+}
+function adminLogout(){
+  isAdmin = false;
+  document.getElementById('admin-login-view').style.display='flex';
+  document.getElementById('admin-dashboard-view').style.display='none';
+  document.getElementById('admin-user').value=''; document.getElementById('admin-pass').value='';
+}
+
+let currentAdminTab = 'general';
+function setAdminTab(tab){
+  currentAdminTab = tab;
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  const panel = document.getElementById('admin-panel');
+  if(tab==='general') panel.innerHTML = adminGeneralView();
+  if(tab==='historias') panel.innerHTML = adminHistoriasView();
+  if(tab==='aliados') panel.innerHTML = adminAliadosView();
+  if(tab==='eventos') panel.innerHTML = adminEventosView();
+  if(tab==='tienda') panel.innerHTML = adminTiendaView();
+  if(tab==='pagos') panel.innerHTML = adminPagosView();
+  if(tab==='donaciones') panel.innerHTML = adminDonacionesView();
+  if(tab==='pedidos') panel.innerHTML = adminPedidosView();
+}
+
+function adminGeneralView(){
+  return `
+    <h3>Contenido general</h3>
+    <div class="field"><label>Link del video de portada (YouTube o Vimeo)</label>
+      <input type="text" id="g-hero-video" value="${escapeHtml(content.heroVideoUrl)}" placeholder="https://youtube.com/watch?v=..."></div>
+    <div class="row2">
+      <div class="field"><label>Meta de recaudo (USD)</label><input type="number" id="g-goal" value="${content.thermometer.goal}"></div>
+      <div class="field"><label>Monto recaudado actual (USD)</label><input type="number" id="g-raised" value="${content.thermometer.raised}"></div>
+    </div>
+    <button class="btn btn-primary" onclick="saveGeneral()">Guardar cambios</button>
+  `;
+}
+async function saveGeneral(){
+  content.heroVideoUrl = document.getElementById('g-hero-video').value.trim();
+  content.thermometer.goal = Number(document.getElementById('g-goal').value)||1000000;
+  content.thermometer.raised = Number(document.getElementById('g-raised').value)||0;
+  await saveContent(); renderAll();
+}
+
+function adminHistoriasView(){
+  const rows = content.historias.map(h => `
+    <div class="admin-item">
+      <div><strong>${escapeHtml(h.titulo)}</strong><div class="meta">${escapeHtml(h.videoUrl||'sin video')}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteHistoria('${h.id}')">Eliminar</button>
+    </div>`).join('') || '<p style="color:#8a97a3;">Sin historias aún.</p>';
+  return `
+    <h3>Historias / videos de apoyo</h3>
+    <div class="admin-row-list">${rows}</div>
+    <h3 style="font-size:1rem;">Agregar nueva historia</h3>
+    <div class="grid-form">
+      <div class="field"><label>Título</label><input type="text" id="h-titulo"></div>
+      <div class="field"><label>Link de video (YouTube/Vimeo)</label><input type="text" id="h-video"></div>
+      <div class="field full"><label>Descripción breve</label><textarea id="h-desc" rows="2"></textarea></div>
+    </div>
+    <button class="btn btn-primary" onclick="addHistoria()">Agregar historia</button>
+  `;
+}
+async function addHistoria(){
+  const titulo = document.getElementById('h-titulo').value.trim();
+  const videoUrl = document.getElementById('h-video').value.trim();
+  const descripcion = document.getElementById('h-desc').value.trim();
+  if(!titulo) return;
+  content.historias.unshift({id:uid(), titulo, videoUrl, descripcion});
+  await saveContent(); renderAll(); setAdminTab('historias');
+}
+async function deleteHistoria(id){
+  content.historias = content.historias.filter(h=>h.id!==id);
+  await saveContent(); renderAll(); setAdminTab('historias');
+}
+
+function adminAliadosView(){
+  const rows = content.aliados.map(a => `
+    <div class="admin-item"><strong>${escapeHtml(a.nombre)}</strong>
+      <button class="btn btn-danger btn-sm" onclick="deleteAliado('${a.id}')">Eliminar</button>
+    </div>`).join('') || '<p style="color:#8a97a3;">Sin aliados aún.</p>';
+  return `
+    <h3>Empresas y aliados</h3>
+    <div class="admin-row-list">${rows}</div>
+    <div class="field" style="max-width:340px;"><label>Nombre de la empresa</label><input type="text" id="a-nombre"></div>
+    <button class="btn btn-primary" onclick="addAliado()">Agregar aliado</button>
+  `;
+}
+async function addAliado(){
+  const nombre = document.getElementById('a-nombre').value.trim();
+  if(!nombre) return;
+  content.aliados.unshift({id:uid(), nombre});
+  await saveContent(); renderAll(); setAdminTab('aliados');
+}
+async function deleteAliado(id){
+  content.aliados = content.aliados.filter(a=>a.id!==id);
+  await saveContent(); renderAll(); setAdminTab('aliados');
+}
+
+function adminEventosView(){
+  const rows = content.eventos.map(ev => `
+    <div class="admin-item">
+      <div><strong>${escapeHtml(ev.titulo)}</strong><div class="meta">${escapeHtml(ev.fecha||'')} ${ev.lugar? '· '+escapeHtml(ev.lugar):''}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteEvento('${ev.id}')">Eliminar</button>
+    </div>`).join('') || '<p style="color:#8a97a3;">Sin encuentros aún.</p>';
+  return `
+    <h3>Próximos encuentros y acciones</h3>
+    <div class="admin-row-list">${rows}</div>
+    <h3 style="font-size:1rem;">Agregar encuentro</h3>
+    <div class="grid-form">
+      <div class="field"><label>Título</label><input type="text" id="e-titulo" placeholder="Convite en el barrio X"></div>
+      <div class="field"><label>Fecha</label><input type="text" id="e-fecha" placeholder="Sáb 22 ago, 9:00 a.m."></div>
+      <div class="field"><label>Lugar</label><input type="text" id="e-lugar" placeholder="Parque Caldas"></div>
+      <div class="field full"><label>Descripción</label><textarea id="e-desc" rows="2"></textarea></div>
+    </div>
+    <button class="btn btn-primary" onclick="addEvento()">Agregar encuentro</button>
+  `;
+}
+async function addEvento(){
+  const titulo = document.getElementById('e-titulo').value.trim();
+  const fecha = document.getElementById('e-fecha').value.trim();
+  const lugar = document.getElementById('e-lugar').value.trim();
+  const descripcion = document.getElementById('e-desc').value.trim();
+  if(!titulo) return;
+  content.eventos.unshift({id:uid(), titulo, fecha, lugar, descripcion});
+  await saveContent(); renderAll(); setAdminTab('eventos');
+}
+async function deleteEvento(id){
+  content.eventos = content.eventos.filter(e=>e.id!==id);
+  await saveContent(); renderAll(); setAdminTab('eventos');
+}
+
+function adminTiendaView(){
+  const rows = content.productos.map(p => `
+    <div class="admin-item">
+      <div><strong>${escapeHtml(p.nombre)}</strong><div class="meta">${fmtUSD(p.precio)}</div></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteProducto('${p.id}')">Eliminar</button>
+    </div>`).join('') || '<p style="color:#8a97a3;">Sin productos aún.</p>';
+  return `
+    <h3>Productos de la tienda</h3>
+    <div class="admin-row-list">${rows}</div>
+    <h3 style="font-size:1rem;">Agregar producto</h3>
+    <div class="grid-form">
+      <div class="field"><label>Nombre</label><input type="text" id="p-nombre"></div>
+      <div class="field"><label>Precio (USD)</label><input type="number" id="p-precio"></div>
+      <div class="field"><label>Emoji / ícono (si no hay imagen)</label><input type="text" id="p-emoji" placeholder="🫓"></div>
+      <div class="field"><label>URL de imagen (opcional)</label><input type="text" id="p-imagen"></div>
+      <div class="field full"><label>Descripción</label><textarea id="p-desc" rows="2"></textarea></div>
+    </div>
+    <button class="btn btn-primary" onclick="addProducto()">Agregar producto</button>
+  `;
+}
+async function addProducto(){
+  const nombre = document.getElementById('p-nombre').value.trim();
+  const precio = Number(document.getElementById('p-precio').value)||0;
+  const emoji = document.getElementById('p-emoji').value.trim();
+  const imagen = document.getElementById('p-imagen').value.trim();
+  const descripcion = document.getElementById('p-desc').value.trim();
+  if(!nombre) return;
+  content.productos.unshift({id:uid(), nombre, precio, emoji, imagen, descripcion});
+  await saveContent(); renderAll(); setAdminTab('tienda');
+}
+async function deleteProducto(id){
+  content.productos = content.productos.filter(p=>p.id!==id);
+  await saveContent(); renderAll(); setAdminTab('tienda');
+}
+
+function adminPagosView(){
+  const b = content.banco;
+  return `
+    <h3>Configuración de pagos</h3>
+    <div class="field"><label>Link de donación de PayPal (PayPal.me o botón Donate)</label>
+      <input type="text" id="pay-paypal" value="${escapeHtml(content.paypalLink)}" placeholder="https://paypal.me/MisionManizales"></div>
+    <h3 style="font-size:1rem; margin-top:20px;">Cuenta bancaria para transferencias</h3>
+    <div class="grid-form">
+      <div class="field"><label>Banco</label><input type="text" id="pay-banco" value="${escapeHtml(b.banco)}"></div>
+      <div class="field"><label>Tipo de cuenta</label><input type="text" id="pay-tipo" value="${escapeHtml(b.tipoCuenta)}" placeholder="Ahorros / Corriente"></div>
+      <div class="field"><label>Número de cuenta</label><input type="text" id="pay-num" value="${escapeHtml(b.numeroCuenta)}"></div>
+      <div class="field"><label>Titular</label><input type="text" id="pay-titular" value="${escapeHtml(b.titular)}"></div>
+      <div class="field"><label>NIT (opcional)</label><input type="text" id="pay-nit" value="${escapeHtml(b.nit)}"></div>
+    </div>
+    <button class="btn btn-primary" onclick="savePagos()">Guardar configuración de pagos</button>
+    <p class="note-small" style="margin-top:14px;">Nota: esta sección guarda los datos que se muestran al donante. Para procesar cobros reales de PayPal o de tu banco necesitas conectar credenciales reales de comercio en un backend seguro — este panel no mueve dinero por sí solo.</p>
+  `;
+}
+async function savePagos(){
+  content.paypalLink = document.getElementById('pay-paypal').value.trim();
+  content.banco = {
+    banco: document.getElementById('pay-banco').value.trim(),
+    tipoCuenta: document.getElementById('pay-tipo').value.trim(),
+    numeroCuenta: document.getElementById('pay-num').value.trim(),
+    titular: document.getElementById('pay-titular').value.trim(),
+    nit: document.getElementById('pay-nit').value.trim(),
+  };
+  await saveContent(); renderAll();
+}
+
+function adminDonacionesView(){
+  const rows = donaciones.map(d => `
+    <tr>
+      <td>${new Date(d.fecha).toLocaleString('es-CO')}</td>
+      <td>${escapeHtml(d.tipoDocumento||'')} ${escapeHtml(d.numeroDocumento||'')}</td>
+      <td>${escapeHtml(d.nombre)}</td>
+      <td>${escapeHtml(d.telefono)}</td>
+      <td>${escapeHtml(d.correo)}</td>
+      <td>${escapeHtml(d.direccion)}</td>
+      <td class="mono">${fmtUSD(d.monto)}</td>
+      <td>${d.metodo}</td>
+    </tr>`).join('');
+  return `
+    <h3>Donaciones registradas (${donaciones.length})</h3>
+    <div style="overflow-x:auto;">
+    <table class="admin-table">
+      <thead><tr><th>Fecha</th><th>Documento</th><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Dirección</th><th>Monto</th><th>Método</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="8" style="color:#8a97a3;">Aún no hay donaciones.</td></tr>'}</tbody>
+    </table>
+    </div>
+    <p class="note-small" style="margin-top:14px;">Estos datos incluyen información personal de los donantes. Trátalos conforme a tu política de datos y la Ley 1581 de 2012.</p>
+  `;
+}
+
+function adminPedidosView(){
+  const rows = pedidos.map(p => `
+    <tr>
+      <td>${new Date(p.fecha).toLocaleString('es-CO')}</td>
+      <td>${escapeHtml(p.nombre)}</td>
+      <td>${escapeHtml(p.correo)}</td>
+      <td>${p.items.map(i=>`${escapeHtml(i.nombre)} x${i.cantidad}`).join(', ')}</td>
+      <td class="mono">${fmtUSD(p.total)}</td>
+      <td>${p.metodo}</td>
+    </tr>`).join('');
+  return `
+    <h3>Pedidos de la tienda (${pedidos.length})</h3>
+    <div style="overflow-x:auto;">
+    <table class="admin-table">
+      <thead><tr><th>Fecha</th><th>Nombre</th><th>Correo</th><th>Productos</th><th>Total</th><th>Método</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" style="color:#8a97a3;">Aún no hay pedidos.</td></tr>'}</tbody>
+    </table>
+    </div>
+  `;
+}
+
+/* ==============================================================
+   INIT
+   ============================================================== */
+loadAll();
+</script>
+</body>
+</html>
