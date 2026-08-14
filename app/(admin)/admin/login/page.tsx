@@ -1,42 +1,13 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useActionState } from "react";
+import { loginAction, type LoginState } from "./actions";
+
+const initialState: LoginState = {};
 
 export default function AdminLoginPage() {
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    const form = new FormData(e.currentTarget);
-    const email = String(form.get("email")).trim();
-    const password = String(form.get("password"));
-
-    try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-        callbackUrl: "/admin",
-      });
-
-      if (!result?.ok || result.error) {
-        setError("Credenciales incorrectas o demasiados intentos.");
-        return;
-      }
-
-      window.location.assign("/admin");
-    } catch {
-      setError("Error de conexión. Intenta de nuevo.");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [state, formAction, pending] = useActionState(loginAction, initialState);
 
   return (
     <div
@@ -48,10 +19,17 @@ export default function AdminLoginPage() {
         <p style={{ color: "#7a8896", fontSize: "0.85rem", marginBottom: 20 }}>
           Misión Manizales — acceso restringido
         </p>
-        <form onSubmit={onSubmit}>
+        <form action={formAction}>
           <div className="field">
             <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" required autoComplete="username" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="username"
+              defaultValue="admin@misionmanizales.org"
+            />
           </div>
           <div className="field">
             <label htmlFor="password">Contraseña</label>
@@ -63,9 +41,9 @@ export default function AdminLoginPage() {
               autoComplete="current-password"
             />
           </div>
-          {error && <p style={{ color: "#b3432d", marginBottom: 12 }}>{error}</p>}
-          <button className="btn btn-primary" type="submit" disabled={loading} style={{ width: "100%" }}>
-            {loading ? "Ingresando…" : "Ingresar"}
+          {state.error && <p style={{ color: "#b3432d", marginBottom: 12 }}>{state.error}</p>}
+          <button className="btn btn-primary" type="submit" disabled={pending} style={{ width: "100%" }}>
+            {pending ? "Ingresando…" : "Ingresar"}
           </button>
         </form>
         <Link href="/" className="btn btn-outline" style={{ width: "100%", marginTop: 12, justifyContent: "center" }}>
