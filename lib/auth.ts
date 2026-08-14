@@ -27,7 +27,7 @@ declare module "@auth/core/jwt" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  trustHost: process.env.AUTH_TRUST_HOST === "true",
+  trustHost: true,
   session: { strategy: "jwt", maxAge: 30 * 60 },
   pages: { signIn: "/admin/login" },
   providers: [

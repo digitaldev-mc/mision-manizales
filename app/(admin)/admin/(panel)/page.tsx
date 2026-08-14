@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
-  if (!session?.user) redirect("/admin/login");
+  if (!session?.user) return null;
 
   const [donations, orders, products] = await Promise.all([
     prisma.donation.count(),

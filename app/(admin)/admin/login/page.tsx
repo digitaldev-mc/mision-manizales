@@ -14,18 +14,28 @@ export default function AdminLoginPage() {
     setError("");
 
     const form = new FormData(e.currentTarget);
-    const result = await signIn("credentials", {
-      email: String(form.get("email")),
-      password: String(form.get("password")),
-      redirect: false,
-    });
+    const email = String(form.get("email")).trim();
+    const password = String(form.get("password"));
 
-    setLoading(false);
-    if (result?.error) {
-      setError("Credenciales incorrectas o demasiados intentos.");
-      return;
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/admin",
+      });
+
+      if (!result?.ok || result.error) {
+        setError("Credenciales incorrectas o demasiados intentos.");
+        return;
+      }
+
+      window.location.assign("/admin");
+    } catch {
+      setError("Error de conexión. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
-    window.location.href = "/admin";
   }
 
   return (
@@ -41,11 +51,17 @@ export default function AdminLoginPage() {
         <form onSubmit={onSubmit}>
           <div className="field">
             <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" required />
+            <input id="email" name="email" type="email" required autoComplete="username" />
           </div>
           <div className="field">
             <label htmlFor="password">Contraseña</label>
-            <input id="password" name="password" type="password" required />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autoComplete="current-password"
+            />
           </div>
           {error && <p style={{ color: "#b3432d", marginBottom: 12 }}>{error}</p>}
           <button className="btn btn-primary" type="submit" disabled={loading} style={{ width: "100%" }}>
