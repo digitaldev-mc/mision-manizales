@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import { getToken } from "next-auth/jwt";
 
 const FINANZAS_ROUTES = ["/admin/donaciones", "/admin/pedidos"];
 const CONTENIDO_ROUTES = ["/admin/contenido", "/admin/productos", "/admin/termometro"];
@@ -26,12 +26,16 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    const session = await auth();
-    if (!session?.user) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET,
+    });
+
+    if (!token) {
       return withSecurityHeaders(NextResponse.redirect(new URL("/admin/login", request.url)));
     }
 
-    const role = session.user.role;
+    const role = token.role as string | undefined;
     if (role === "CONTENIDO" && FINANZAS_ROUTES.some((r) => pathname.startsWith(r))) {
       return withSecurityHeaders(NextResponse.redirect(new URL("/admin", request.url)));
     }
