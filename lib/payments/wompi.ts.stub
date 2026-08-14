@@ -1,0 +1,20 @@
+import type { PaymentProvider } from "./provider";
+
+/**
+ * Placeholder para integración futura con Wompi/ePayco.
+ * Implementar la interfaz PaymentProvider cuando el cliente lo apruebe.
+ */
+export const wompiProvider: PaymentProvider = {
+  async createOrder() {
+    throw new Error("Wompi/ePayco no está activo en esta fase");
+  },
+  async verifyWebhookSignature() {
+    return false;
+  },
+  parseWebhookEvent() {
+    throw new Error("Wompi/ePayco no está activo en esta fase");
+  },
+  async captureOrder() {
+    throw new Error("Wompi/ePayco no está activo en esta fase");
+  },
+};
