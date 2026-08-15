@@ -1,90 +1,81 @@
-import Link from "next/link";
-import { Thermometer } from "@/components/Thermometer";
+import { HomePage } from "@/components/v2/HomePage";
+import { prisma } from "@/lib/prisma";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+async function getThermometerSnapshot() {
+  const [donations, settings, paidOrders, donationCount] = await Promise.all([
+    prisma.donation.aggregate({
+      where: { status: "confirmed" },
+      _sum: { amountCOP: true },
+    }),
+    prisma.thermometerSetting.findUnique({ where: { id: 1 } }),
+    prisma.order.aggregate({
+      where: { status: { in: ["paid", "preparing", "shipped", "delivered"] } },
+      _sum: { totalCOP: true },
+    }),
+    prisma.donation.count({ where: { status: "confirmed" } }),
+  ]);
+
+  const manualAdjustCOP = settings?.manualAdjustCOP ?? 0;
+  const raisedCOP =
+    (donations._sum.amountCOP ?? 0) +
+    (paidOrders._sum.totalCOP ?? 0) +
+    manualAdjustCOP;
+
+  return { raisedCOP, donorCount: donationCount };
+}
+
+export default async function Page() {
+  const [thermo, events, stories, partners, products] = await Promise.all([
+    getThermometerSnapshot(),
+    prisma.event.findMany({
+      where: { published: true },
+      orderBy: { date: "asc" },
+      take: 12,
+    }),
+    prisma.story.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+      take: 12,
+    }),
+    prisma.partner.findMany({
+      where: { active: true },
+      orderBy: { order: "asc" },
+    }),
+    prisma.product.findMany({
+      where: { active: true },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+    }),
+  ]);
+
   return (
-    <>
-      <header className="nav">
-        <div className="nav-inner">
-          <Link href="/" className="brand">
-            <span>
-              <span className="brand-name">Misión Manizales</span>
-              <br />
-              <span className="brand-tag">Lo que nos une, nos reconstruye</span>
-            </span>
-          </Link>
-          <ul className="nav-links">
-            <li>
-              <a href="#historia">Historia</a>
-            </li>
-            <li>
-              <a href="#apoya">Recaudo</a>
-            </li>
-            <li>
-              <Link href="/tienda">Tienda</Link>
-            </li>
-          </ul>
-          <Link href="/donar" className="btn btn-primary btn-sm">
-            Donar ahora
-          </Link>
-        </div>
-      </header>
-
-      <section className="hero" id="inicio">
-        <div className="hero-media" />
-        <div className="hero-overlay">
-          <div className="hero-copy">
-            <span className="eyebrow">🫓 Manizales se reconstruye entre todos</span>
-            <h1>
-              Una empanada es un gesto.
-              <br />
-              Miles de gestos reconstruyen una ciudad.
-            </h1>
-            <p>
-              Pequeños aportes compartidos que levantan a Manizales — hoy, como hace un
-              siglo y como en los noventa.
-            </p>
-            <div className="hero-actions">
-              <Link href="/donar" className="btn btn-primary">
-                Quiero aportar
-              </Link>
-              <a href="#apoya" className="btn btn-ghost">
-                Ver el avance del recaudo ↓
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="historia" id="historia">
-        <div className="wrap">
-          <span className="kicker">Verdad de marca</span>
-          <h2>La reconstrucción no empieza con una gran obra.</h2>
-          <p style={{ color: "#48586a", marginTop: 12, maxWidth: 720 }}>
-            Empieza cuando todos deciden aportar algo. Manizales ya sabe levantarse unida.
-          </p>
-        </div>
-      </section>
-
-      <section id="apoya">
-        <div className="wrap">
-          <div className="section-head">
-            <span className="kicker">Recaudo en vivo</span>
-            <h2>El termómetro de la reconstrucción</h2>
-            <p>Cada aporte confirmado suma. Solo sube con pagos verificados.</p>
-          </div>
-          <Thermometer />
-        </div>
-      </section>
-
-      <footer>
-        <div className="wrap footer-bottom">
-          <span>© 2026 Misión Manizales · Lo que nos une, nos reconstruye</span>
-          <Link href="/admin/login" style={{ opacity: 0.6 }}>
-            Panel administrativo
-          </Link>
-        </div>
-      </footer>
-    </>
+    <HomePage
+      raisedCOP={thermo.raisedCOP}
+      donorCount={thermo.donorCount}
+      events={events.map((e) => ({
+        id: e.id,
+        title: e.title,
+        date: e.date.toISOString(),
+        place: e.place,
+        description: e.description,
+      }))}
+      stories={stories.map((s) => ({
+        id: s.id,
+        title: s.title,
+        videoUrl: s.videoUrl,
+        description: s.description,
+      }))}
+      partners={partners.map((p) => ({ id: p.id, name: p.name }))}
+      products={products.map((p) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        priceCOP: p.priceCOP,
+        imageUrl: p.imageUrl,
+        soldOut: p.soldOut,
+      }))}
+    />
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
-import "./globals.css";
+import "./v2.css";
 
 export const metadata: Metadata = {
   title: "Misión Manizales — Lo que nos une, nos reconstruye",

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 async function computeThermometer() {
-  const [donations, settings, paidOrders] = await Promise.all([
+  const [donations, settings, paidOrders, donationCount] = await Promise.all([
     prisma.donation.aggregate({
       where: { status: "confirmed" },
       _sum: { amountCOP: true },
@@ -15,6 +15,7 @@ async function computeThermometer() {
       where: { status: { in: ["paid", "preparing", "shipped", "delivered"] } },
       _sum: { totalCOP: true },
     }),
+    prisma.donation.count({ where: { status: "confirmed" } }),
   ]);
 
   const goalCOP = settings?.goalCOP ?? 500_000_000;
@@ -27,6 +28,7 @@ async function computeThermometer() {
   return {
     goalCOP,
     raisedCOP,
+    donationCount,
     percent: goalCOP > 0 ? Math.min(100, Math.round((raisedCOP / goalCOP) * 100)) : 0,
   };
 }

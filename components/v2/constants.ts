@@ -1,0 +1,5 @@
+export const EMPANADA_PATH =
+  "M 165,35 A 165,165 0 1 1 140,375 A 220,220 0 0 1 165,35 Z";
+
+export const EMPANADA_CRIMP =
+  "M 140,375 A 220,220 0 0 1 165,35";
