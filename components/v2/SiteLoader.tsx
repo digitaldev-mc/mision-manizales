@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { EMPANADA_CRIMP, EMPANADA_PATH } from "./constants";
+import { EMPANADA_PATH, EMPANADA_VIEWBOX, GAUGE_FILL } from "./constants";
 
 export function SiteLoader() {
   const [hidden, setHidden] = useState(false);
@@ -19,14 +19,14 @@ export function SiteLoader() {
 
   return (
     <div id="loader" className={hidden ? "hide" : undefined}>
-      <svg className="loader-emp" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+      <svg className="loader-emp" viewBox={EMPANADA_VIEWBOX} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="loaderGrad" x1="0" y1="1" x2="0" y2="0">
             <stop offset="0%" stopColor="#c9a24a" />
             <stop offset="55%" stopColor="#f4c542" />
             <stop offset="100%" stopColor="#ffe083" />
           </linearGradient>
-          <clipPath id="loaderClip">
+          <clipPath id="loaderClip" clipPathUnits="userSpaceOnUse">
             <path d={EMPANADA_PATH} />
           </clipPath>
         </defs>
@@ -34,21 +34,19 @@ export function SiteLoader() {
           d={EMPANADA_PATH}
           fill="var(--amarillo-opaco)"
           stroke="var(--terracota)"
-          strokeWidth="7"
+          strokeWidth="6"
         />
         <g clipPath="url(#loaderClip)">
-          <rect className="l-fill" x="0" y="35" width="320" height="385" fill="url(#loaderGrad)" />
+          <rect
+            className="l-fill"
+            x={GAUGE_FILL.x}
+            y={GAUGE_FILL.top}
+            width={GAUGE_FILL.width}
+            height={GAUGE_FILL.range}
+            fill="url(#loaderGrad)"
+          />
         </g>
-        <path d={EMPANADA_PATH} fill="none" stroke="var(--terracota)" strokeWidth="7" />
-        <path
-          d={EMPANADA_CRIMP}
-          fill="none"
-          stroke="#b5602f"
-          strokeWidth="4"
-          strokeDasharray="2 15"
-          strokeLinecap="round"
-          opacity="0.5"
-        />
+        <path d={EMPANADA_PATH} fill="none" stroke="var(--terracota)" strokeWidth="6" />
       </svg>
       <div className="loader-brand">Misión Manizales</div>
       <div className="loader-tag">Lo que nos une, nos reconstruye</div>

@@ -268,7 +268,12 @@ section{padding:clamp(56px,9vw,96px) 0; position:relative;}
 .termo-tube-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; position:relative;}
 .gauge-svg-wrap{position:relative; width:190px; filter:drop-shadow(0 16px 26px rgba(30,58,95,.22));}
 .gauge-svg-wrap svg{width:100%; height:auto; display:block; overflow:visible;}
-#gauge-fill-rect{transition:y 1.2s var(--ease), height 1.2s var(--ease), fill 1.2s ease;}
+#gauge-fill-rect{
+  transition:y 1.2s cubic-bezier(.19,1,.22,1), height 1.2s cubic-bezier(.19,1,.22,1), fill 1.2s ease;
+}
+#gauge-shine{
+  transition:y 1.2s cubic-bezier(.19,1,.22,1);
+}
 .gauge-sparkle{position:absolute; width:6px; height:6px; border-radius:50%; background:#fff8dd; opacity:0; top:20%; left:50%; box-shadow:0 0 8px 2px rgba(244,197,66,.7);}
 .gauge-sparkle.go{animation:sparkleUp 1.6s ease-out forwards;}
 @keyframes sparkleUp{

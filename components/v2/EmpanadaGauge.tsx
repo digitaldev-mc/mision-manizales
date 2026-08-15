@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { lerpColor } from "@/lib/color";
 import { fmtCOPShort } from "@/lib/format";
-import { EMPANADA_CRIMP, EMPANADA_PATH } from "./constants";
+import {
+  EMPANADA_PATH,
+  EMPANADA_VIEWBOX,
+  GAUGE_FILL,
+  gaugeFillFromPercent,
+} from "./constants";
 import { animateCount } from "./useScrollReveal";
 
 type ThermometerData = {
@@ -20,26 +24,25 @@ export function EmpanadaGauge() {
   const [sparkKey, setSparkKey] = useState(0);
 
   useEffect(() => {
-    async function load(animate = false) {
+    async function load(animateNumbers = false) {
       try {
         const res = await fetch("/api/termometro");
         if (!res.ok) return;
         const json = (await res.json()) as ThermometerData;
         setData(json);
 
-        if (animate) {
-          const raisedEl = document.getElementById("raised-amount");
-          const hsRaised = document.getElementById("hs-raised");
-          const hsDonors = document.getElementById("hs-donors");
-          animateCount(raisedEl, json.raisedCOP, "$ ");
-          animateCount(hsRaised, json.raisedCOP, "$ ");
-          animateCount(hsDonors, json.donationCount, "");
+        if (animateNumbers) {
+          animateCount(document.getElementById("raised-amount"), json.raisedCOP, "$ ");
+          animateCount(document.getElementById("hs-raised"), json.raisedCOP, "$ ");
+          animateCount(document.getElementById("hs-donors"), json.donationCount, "");
         }
 
-        if (json.percent > lastPct.current + 0.001) {
+        const pct =
+          json.goalCOP > 0 ? Math.min(100, (json.raisedCOP / json.goalCOP) * 100) : 0;
+        if (pct > lastPct.current + 0.001) {
           setSparkKey((k) => k + 1);
         }
-        lastPct.current = json.percent;
+        lastPct.current = pct;
       } catch {
         /* ignore */
       }
@@ -52,12 +55,8 @@ export function EmpanadaGauge() {
 
   const goal = data?.goalCOP ?? 500_000_000;
   const raised = data?.raisedCOP ?? 0;
-  const pct = data ? Math.min(100, (raised / goal) * 100) : 0;
-  const t = pct / 100;
-  const fillH = t * 385;
-  const fillY = 420 - fillH;
-  const stopA = lerpColor("#b7a262", "#e0870a", t);
-  const stopB = lerpColor("#e4d08c", "#ffcf4d", t);
+  const pct = goal > 0 ? Math.min(100, (raised / goal) * 100) : 0;
+  const { fillH, fillY, shineY, stopA, stopB } = gaugeFillFromPercent(pct);
   const donationCount = data?.donationCount ?? 0;
 
   return (
@@ -85,55 +84,50 @@ export function EmpanadaGauge() {
         <div className="termo-card reveal-scale">
           <div className="termo-tube-wrap">
             <div className="gauge-svg-wrap">
-              <svg viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox={EMPANADA_VIEWBOX} xmlns="http://www.w3.org/2000/svg">
                 <defs>
+                  <clipPath id="empanadaClip" clipPathUnits="userSpaceOnUse">
+                    <path d={EMPANADA_PATH} />
+                  </clipPath>
                   <linearGradient id="fillGrad" x1="0" y1="1" x2="0" y2="0">
                     <stop id="fillStopA" offset="0%" stopColor={stopA} />
                     <stop id="fillStopB" offset="100%" stopColor={stopB} />
                   </linearGradient>
-                  <clipPath id="empanadaClip">
-                    <path d={EMPANADA_PATH} />
-                  </clipPath>
                 </defs>
+
                 <path
+                  className="emp-outline"
                   d={EMPANADA_PATH}
                   fill="var(--amarillo-opaco)"
                   stroke="var(--terracota)"
-                  strokeWidth="7"
+                  strokeWidth="6"
                 />
+
                 <g clipPath="url(#empanadaClip)">
                   <rect
                     id="gauge-fill-rect"
-                    x="0"
+                    x={GAUGE_FILL.x}
                     y={fillY}
-                    width="320"
+                    width={GAUGE_FILL.width}
                     height={fillH}
                     fill="url(#fillGrad)"
                   />
                   <rect
                     id="gauge-shine"
-                    x="0"
-                    y={Math.max(35, fillY - 5)}
-                    width="320"
+                    x={GAUGE_FILL.x}
+                    y={shineY}
+                    width={GAUGE_FILL.width}
                     height="6"
                     fill="#fff6d8"
                     opacity="0.65"
                   />
                 </g>
+
                 <path
                   d={EMPANADA_PATH}
                   fill="none"
                   stroke="var(--terracota)"
-                  strokeWidth="7"
-                />
-                <path
-                  d={EMPANADA_CRIMP}
-                  fill="none"
-                  stroke="#b5602f"
-                  strokeWidth="4"
-                  strokeDasharray="2 15"
-                  strokeLinecap="round"
-                  opacity="0.45"
+                  strokeWidth="6"
                 />
               </svg>
               {[0, 1, 2].map((i) => (
