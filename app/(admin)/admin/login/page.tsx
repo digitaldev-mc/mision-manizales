@@ -10,43 +10,42 @@ export default function AdminLoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
 
   return (
-    <div
-      className="admin-shell"
-      style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
-    >
-      <div className="form-card" style={{ width: "100%", maxWidth: 400 }}>
-        <h1 style={{ fontSize: "1.4rem", marginBottom: 8 }}>Panel administrativo</h1>
-        <p style={{ color: "#7a8896", fontSize: "0.85rem", marginBottom: 20 }}>
-          Misión Manizales — acceso restringido
+    <div className="admin-login-page">
+      <div className="admin-login-card">
+        <div className="admin-login-brand">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/assets/sello-catedral.png" alt="" />
+          <div>
+            <strong style={{ fontFamily: "Fraunces, serif", fontSize: "1.1rem" }}>Misión Manizales</strong>
+            <div style={{ fontSize: "0.75rem", color: "#7a8896" }}>Panel administrativo</div>
+          </div>
+        </div>
+        <p style={{ color: "#7a8896", fontSize: "0.88rem", marginBottom: 24, lineHeight: 1.5 }}>
+          Acceso restringido para el equipo de la campaña. Ingresa con tu cuenta autorizada.
         </p>
         <form action={formAction}>
           <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autoComplete="username"
-              defaultValue="admin@misionmanizales.org"
-            />
+            <label htmlFor="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" required autoComplete="username" />
           </div>
           <div className="field">
             <label htmlFor="password">Contraseña</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-            />
+            <input id="password" name="password" type="password" required autoComplete="current-password" />
           </div>
-          {state.error && <p style={{ color: "#b3432d", marginBottom: 12 }}>{state.error}</p>}
-          <button className="btn btn-primary" type="submit" disabled={pending} style={{ width: "100%" }}>
-            {pending ? "Ingresando…" : "Ingresar"}
+          {state.error ? (
+            <p className="err" style={{ marginBottom: 16 }}>
+              {state.error}
+            </p>
+          ) : null}
+          <button className="btn btn-primary btn-block" type="submit" disabled={pending}>
+            {pending ? "Ingresando…" : "Ingresar al panel"}
           </button>
         </form>
-        <Link href="/" className="btn btn-outline" style={{ width: "100%", marginTop: 12, justifyContent: "center" }}>
+        <Link
+          href="/"
+          className="btn btn-outline btn-block"
+          style={{ marginTop: 14, justifyContent: "center" }}
+        >
           Volver al sitio
         </Link>
       </div>

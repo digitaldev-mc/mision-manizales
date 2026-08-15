@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { AdminShell } from "@/components/admin/AdminShell";
 
 export default async function AdminPanelLayout({
   children,
@@ -11,5 +12,5 @@ export default async function AdminPanelLayout({
     redirect("/admin/login");
   }
 
-  return children;
+  return <AdminShell user={session.user}>{children}</AdminShell>;
 }

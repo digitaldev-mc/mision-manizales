@@ -479,8 +479,9 @@ button.pay-gateway{font:inherit; width:100%;}
 /* ---------- ADMIN ---------- */
 #admin-link{position:fixed; bottom:14px; left:14px; z-index:60; font-size:.7rem; color:#9aa7b1; opacity:.5; text-decoration:none;}
 #admin-link:hover{opacity:1;}
-.admin-shell{position:fixed; inset:0; background:var(--crema-masa); z-index:200; display:none; overflow-y:auto;}
-.admin-shell.show{display:block;}
+/* Prototipo HTML: overlay oculto hasta .show */
+#admin-shell.admin-shell{position:fixed; inset:0; background:var(--crema-masa); z-index:200; display:none; overflow-y:auto;}
+#admin-shell.admin-shell.show{display:block;}
 .admin-top{background:var(--grad-noche); color:#fff; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:5; flex-wrap:wrap; gap:10px;}
 .admin-top .b{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:700;}
 .admin-login-wrap{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:var(--grad-noche);}
