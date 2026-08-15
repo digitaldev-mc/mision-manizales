@@ -50,7 +50,8 @@ const deployCmd = `
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 cd ~/mision-manizales-src
-git pull origin main
+git fetch origin main
+git reset --hard origin/main
 bash scripts/vps-build-restart.sh
 `.trim();
 
