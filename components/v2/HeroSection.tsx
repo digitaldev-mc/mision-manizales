@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
 type HeroSectionProps = {
@@ -42,12 +41,8 @@ export function HeroSection({ raisedCOP, donorCount }: HeroSectionProps) {
           <div className="medal-ring" />
           <div className="medal-ring2" />
           <div className="medal-img">
-            <Image
-              src="/assets/sello-catedral.png"
-              alt="Sello artístico Catedral de Manizales"
-              width={220}
-              height={220}
-            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/sello-catedral.png" alt="Sello artístico Catedral de Manizales" />
           </div>
           <div className="medal-badge">✦ Sello ciudadano</div>
         </div>

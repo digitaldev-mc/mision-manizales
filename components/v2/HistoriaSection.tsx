@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export function HistoriaSection() {
   return (
     <section className="historia" id="historia">
@@ -24,11 +22,10 @@ export function HistoriaSection() {
         </div>
         <div className="img-col reveal-scale">
           <div className="historia-photo">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/assets/empanada-foto.png"
               alt="Empanadas de Manizales, símbolo de reconstrucción colectiva"
-              width={560}
-              height={420}
             />
             <span className="historia-photo-tag">🫓 Un gesto compartido</span>
           </div>
