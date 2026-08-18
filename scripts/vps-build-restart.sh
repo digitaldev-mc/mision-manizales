@@ -12,6 +12,7 @@ cd ~/mision-manizales-src
 
 echo "Node: $(node -v) | npm: $(npm -v) | pm2: $(command -v pm2)"
 
+npm install
 npm run build
 cp .env .next/standalone/.env
 cp -r .next/static .next/standalone/.next/static
