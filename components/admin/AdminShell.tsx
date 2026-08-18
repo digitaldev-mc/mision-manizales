@@ -16,7 +16,7 @@ const NAV = [
 ];
 
 const PAGE_META: Record<string, { title: string; subtitle?: string }> = {
-  "/admin": { title: "Dashboard", subtitle: "Vista general de la campaña Misión Manizales" },
+  "/admin": { title: "Dashboard", subtitle: "Vista general de la campaña Misión Comparte" },
   "/admin/donaciones": { title: "Donaciones", subtitle: "Aportes recibidos y confirmación manual" },
   "/admin/pedidos": { title: "Pedidos", subtitle: "Tienda solidaria y estados de entrega" },
   "/admin/productos": { title: "Productos", subtitle: "Catálogo de la tienda" },
@@ -37,7 +37,7 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 
 export function AdminShell({ user, children }: AdminShellProps) {
   const pathname = usePathname();
-  const meta = PAGE_META[pathname] ?? { title: "Admin", subtitle: "Misión Manizales" };
+  const meta = PAGE_META[pathname] ?? { title: "Admin", subtitle: "Misión Comparte" };
 
   return (
     <div className="admin-app">
@@ -46,7 +46,7 @@ export function AdminShell({ user, children }: AdminShellProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/assets/sello-catedral.png" alt="" />
           <div>
-            <strong>Misión Manizales</strong>
+            <strong>Misión Comparte</strong>
             <span>Panel admin</span>
           </div>
         </div>

@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/assets/sello-catedral.png" alt="" />
           <div>
-            <strong style={{ fontFamily: "Fraunces, serif", fontSize: "1.1rem" }}>Misión Manizales</strong>
+            <strong style={{ fontFamily: "Fraunces, serif", fontSize: "1.1rem" }}>Misión Comparte</strong>
             <div style={{ fontSize: "0.75rem", color: "#7a8896" }}>Panel administrativo</div>
           </div>
         </div>

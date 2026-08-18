@@ -48,7 +48,7 @@ export function SiteLoader() {
         </g>
         <path d={EMPANADA_PATH} fill="none" stroke="var(--terracota)" strokeWidth="6" />
       </svg>
-      <div className="loader-brand">Misión Manizales</div>
+      <div className="loader-brand">Misión Comparte</div>
       <div className="loader-tag">Lo que nos une, nos reconstruye</div>
       <div className="loader-bar">
         <span />

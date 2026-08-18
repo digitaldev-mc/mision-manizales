@@ -17,11 +17,11 @@ export async function sendDonationConfirmedEmail(input: {
   amountCOP: number;
   referenceCode: string;
 }) {
-  const from = process.env.EMAIL_FROM ?? "Misión Manizales <notificaciones@manizalescomparte.com>";
+  const from = process.env.EMAIL_FROM ?? "Misión Comparte <notificaciones@manizalescomparte.com>";
   await getResend().emails.send({
     from,
     to: input.to,
-    subject: "Gracias por tu donación — Misión Manizales",
+    subject: "Gracias por tu donación — Misión Comparte",
     html: `
       <p>Hola ${input.fullName},</p>
       <p>Confirmamos tu donación de <strong>$${input.amountCOP.toLocaleString("es-CO")} COP</strong>.</p>
@@ -40,7 +40,7 @@ export async function sendAdminDonationNotify(input: {
   const adminEmail = process.env.EMAIL_ADMIN_NOTIFY;
   if (!adminEmail) return;
 
-  const from = process.env.EMAIL_FROM ?? "Misión Manizales <notificaciones@manizalescomparte.com>";
+  const from = process.env.EMAIL_FROM ?? "Misión Comparte <notificaciones@manizalescomparte.com>";
   await getResend().emails.send({
     from,
     to: adminEmail,

@@ -43,7 +43,7 @@ const CLIENT_SECRET = appEnv.PAYPAL_CLIENT_SECRET;
 const PAYPAL_ENV = appEnv.PAYPAL_ENV || "live";
 const WEBHOOK_ID = appEnv.PAYPAL_WEBHOOK_ID || "";
 const RESEND_API_KEY = appEnv.RESEND_API_KEY || "";
-const EMAIL_FROM = appEnv.EMAIL_FROM || "Misión Manizales <notificaciones@manizalescomparte.com>";
+const EMAIL_FROM = appEnv.EMAIL_FROM || "Misión Comparte <notificaciones@manizalescomparte.com>";
 const EMAIL_ADMIN_NOTIFY = appEnv.EMAIL_ADMIN_NOTIFY || "manizalescomparte@gmail.com";
 const SITE_URL = appEnv.NEXT_PUBLIC_SITE_URL?.startsWith("http://localhost")
   ? "https://mision.manizalescomparte.com"

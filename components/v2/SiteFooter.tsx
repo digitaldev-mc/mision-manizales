@@ -12,10 +12,10 @@ export function SiteFooter() {
               style={{ display: "inline-flex", verticalAlign: "middle", marginRight: 10 }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/sello-catedral.png" alt="Misión Manizales" />
+              <img src="/assets/sello-catedral.png" alt="Misión Comparte" />
             </span>
             <span className="brand-name" style={{ fontSize: "1.1rem" }}>
-              Misión Manizales
+              Misión Comparte
             </span>
           </div>
           <p style={{ maxWidth: 320 }}>
@@ -40,7 +40,7 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h4>Misión Manizales es de todos</h4>
+          <h4>Misión Comparte es de todos</h4>
           <ul>
             <li>Manizales, Caldas — Colombia</li>
             <li>hola@misionmanizales.org</li>
@@ -48,7 +48,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="wrap footer-bottom">
-        <span>© 2026 Misión Manizales · Lo que nos une, nos reconstruye</span>
+        <span>© 2026 Misión Comparte · Lo que nos une, nos reconstruye</span>
         <Link href="/admin/login" style={{ opacity: 0.6 }}>
           Panel administrativo
         </Link>

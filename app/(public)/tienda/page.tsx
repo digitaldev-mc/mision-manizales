@@ -19,7 +19,7 @@ export default async function TiendaPage() {
       <Link href="/" style={{ display: "inline-block", marginBottom: 24 }}>
         ← Volver al inicio
       </Link>
-      <h1>Tienda Misión Manizales</h1>
+      <h1>Tienda Misión Comparte</h1>
       <p style={{ margin: "12px 0 32px", color: "#5a6875" }}>
         Cada producto es también un aporte a la reconstrucción.
       </p>

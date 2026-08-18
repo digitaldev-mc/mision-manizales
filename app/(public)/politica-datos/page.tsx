@@ -5,7 +5,7 @@ export default function PoliticaDatosPage() {
     <div className="wrap" style={{ padding: "48px 24px", maxWidth: 800 }}>
       <h1>Política de Tratamiento de Datos Personales</h1>
       <p style={{ marginTop: 16 }}>
-        Misión Manizales trata los datos personales de donantes y compradores únicamente
+        Misión Comparte trata los datos personales de donantes y compradores únicamente
         para fines de trazabilidad, confirmación de pagos y cumplimiento legal conforme a
         la Ley 1581 de 2012.
       </p>

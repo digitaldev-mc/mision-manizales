@@ -49,7 +49,7 @@ export function HistoriasSection({ stories }: { stories: StoryItem[] }) {
         <div className="section-head reveal">
           <span className="kicker">Rostros de la reconstrucción</span>
           <h2>Historias y causas que estamos apoyando</h2>
-          <p>Familias, comerciantes y proyectos que reciben ayuda directa de Misión Manizales.</p>
+          <p>Familias, comerciantes y proyectos que reciben ayuda directa de Misión Comparte.</p>
         </div>
         <div className="video-grid" id="video-grid">
           {stories.length === 0 ? (

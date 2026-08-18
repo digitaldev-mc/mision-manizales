@@ -3,7 +3,7 @@ import { Providers } from "./providers";
 import "./v2.css";
 
 export const metadata: Metadata = {
-  title: "Misión Manizales — Lo que nos une, nos reconstruye",
+  title: "Misión Comparte — Lo que nos une, nos reconstruye",
   description: "Campaña ciudadana para reconstruir Manizales, un gesto a la vez.",
 };
 

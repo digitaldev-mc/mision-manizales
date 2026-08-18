@@ -24,10 +24,10 @@ export function SiteNav() {
           <Link href="/#inicio" className="brand">
             <span className="brand-logo-wrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/sello-catedral.png" alt="Sello Misión Manizales" />
+              <img src="/assets/sello-catedral.png" alt="Sello Misión Comparte" />
             </span>
             <span>
-              <span className="brand-name">Misión Manizales</span>
+              <span className="brand-name">Misión Comparte</span>
               <br />
               <span className="brand-tag">Lo que nos une, nos reconstruye</span>
             </span>

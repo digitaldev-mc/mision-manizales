@@ -27,7 +27,7 @@ export function HistoriaCarousel({ images, tag = "🫓 Un gesto compartido" }: H
           <img
             key={`${src}-${i}`}
             src={src}
-            alt="Imagen de la historia de Misión Manizales"
+            alt="Imagen de la historia de Misión Comparte"
             className={i === index ? "is-active" : undefined}
           />
         ))}

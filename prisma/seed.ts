@@ -38,7 +38,7 @@ async function main() {
       data: {
         bank: "Bancolombia",
         account: "123456789",
-        holder: "Misión Manizales",
+        holder: "Misión Comparte",
       },
     },
     update: {},

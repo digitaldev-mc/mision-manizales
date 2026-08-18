@@ -15,7 +15,7 @@ function teamEmail() {
 }
 
 function fromAddress() {
-  return process.env.EMAIL_FROM ?? "Misión Manizales <notificaciones@manizalescomparte.com>";
+  return process.env.EMAIL_FROM ?? "Misión Comparte <notificaciones@manizalescomparte.com>";
 }
 
 function siteUrl() {
@@ -23,7 +23,7 @@ function siteUrl() {
 }
 
 function brandName() {
-  return "Misión Manizales";
+  return "Misión Comparte";
 }
 
 function safeDecrypt(value: string | null | undefined): string {
@@ -239,7 +239,7 @@ export async function notifyDonationConfirmed(d: DonationMailInput) {
   const plainClient = [
     `Hola ${d.fullName},`,
     "",
-    "¡Gracias por tu gran detalle! Confirmamos tu donación a Misión Manizales.",
+    "¡Gracias por tu gran detalle! Confirmamos tu donación a Misión Comparte.",
     `Monto: ${formatMoney(d.amountCOP)} COP`,
     `Referencia: ${d.referenceCode}`,
     "",
@@ -260,7 +260,7 @@ export async function notifyDonationConfirmed(d: DonationMailInput) {
   if (d.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email) && !d.email.endsWith("@misionmanizales.org")) {
     clientOk = await sendHtml({
       to: d.email,
-      subject: `Gracias por tu donación · ${d.referenceCode} · Misión Manizales`,
+      subject: `Gracias por tu donación · ${d.referenceCode} · Misión Comparte`,
       html: htmlClient(d),
       text: plainClient,
       replyTo: team,

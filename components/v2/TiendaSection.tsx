@@ -17,7 +17,7 @@ export function TiendaSection({ products }: { products: ProductItem[] }) {
         <div className="tienda-top reveal">
           <div className="section-head" style={{ marginBottom: 0 }}>
             <span className="kicker">Merch solidario</span>
-            <h2>Tienda Misión Manizales</h2>
+            <h2>Tienda Misión Comparte</h2>
             <p>Cada producto es también un aporte a la reconstrucción.</p>
           </div>
         </div>
