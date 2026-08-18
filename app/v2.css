@@ -552,6 +552,10 @@ table.admin-table th{color:#7a8896; font-weight:700; font-size:.72rem; text-tran
 @media(max-width:600px){.grid-form{grid-template-columns:1fr;} .admin-panel{margin:0 12px 30px; padding:18px;} .admin-top{padding:14px;}}
 .full{grid-column:1/-1;}
 .err{color:#b3432d; font-size:.8rem; margin-top:8px;}
+.paypal-checkout-box{
+  background:rgba(248,241,227,.45); border:1px solid rgba(30,58,95,.1);
+  border-radius:18px; padding:18px 16px;
+}
 
 /* utilidades */
 .hidden{display:none !important;}

@@ -47,7 +47,7 @@ export const paypalProvider: PaymentProvider = {
             reference_id: referenceCode,
             amount: {
               currency_code: currency,
-              value: currency === "USD" ? (amount / 100).toFixed(2) : amount.toFixed(0),
+              value: currency === "USD" ? (amount / 100).toFixed(2) : Number(amount).toFixed(2),
             },
           },
         ],
