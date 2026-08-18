@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin, signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
-import { notifyDonationConfirmed } from "@/lib/email/notify-donation";
+import { donationToMailInput, notifyDonationConfirmed } from "@/lib/email/notify-donation";
 import { generateReferenceCode } from "@/lib/validation/donation";
 import { readUploadFile, savePublicUpload } from "@/lib/upload/save";
 import type { OrderStatus } from "@prisma/client";
@@ -35,19 +35,45 @@ export async function confirmDonationAction(id: string) {
     actorId: user.id,
   });
   try {
-    await notifyDonationConfirmed({
-      fullName: donation.fullName,
-      email: donation.email,
-      phone: donation.phone,
-      amountCOP: donation.amountCOP,
-      referenceCode: donation.referenceCode,
-      paymentMethod: donation.paymentMethod,
-    });
+    await notifyDonationConfirmed(donationToMailInput(donation));
   } catch (err) {
     console.error("Email donación:", err);
   }
   revalidatePath("/admin/donaciones");
   revalidatePath("/admin");
+  revalidatePath("/");
+}
+
+export async function deleteDonationAction(formData: FormData) {
+  const user = await requireAdmin(["SUPERADMIN", "FINANZAS"]);
+  const id = String(formData.get("id") ?? "");
+  const confirmText = String(formData.get("confirmText") ?? "");
+
+  if (confirmText !== "ELIMINAR") {
+    throw new Error('Debes escribir ELIMINAR (en mayúsculas) para confirmar.');
+  }
+
+  const donation = await prisma.donation.findUnique({ where: { id } });
+  if (!donation) {
+    throw new Error("Donación no encontrada");
+  }
+
+  await prisma.donation.delete({ where: { id } });
+  await writeAuditLog({
+    entity: "Donation",
+    entityId: id,
+    action: "delete",
+    actorId: user.id,
+    diff: {
+      referenceCode: donation.referenceCode,
+      amountCOP: donation.amountCOP,
+      status: donation.status,
+    },
+  });
+
+  revalidatePath("/admin/donaciones");
+  revalidatePath("/admin");
+  revalidatePath("/admin/termometro");
   revalidatePath("/");
 }
 

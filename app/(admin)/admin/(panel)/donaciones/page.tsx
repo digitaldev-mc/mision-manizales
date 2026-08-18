@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { ConfirmDonationButton } from "@/components/admin/ConfirmDonationButton";
+import { DeleteDonationForm } from "@/components/admin/DeleteDonationForm";
 import { addManualDonationAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -145,7 +146,10 @@ export default async function AdminDonacionesPage() {
                   <td>{d.createdAt.toLocaleString("es-CO")}</td>
                   {canConfirm ? (
                     <td>
-                      {d.status === "pending" ? <ConfirmDonationButton id={d.id} /> : "—"}
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
+                        {d.status === "pending" ? <ConfirmDonationButton id={d.id} /> : null}
+                        <DeleteDonationForm id={d.id} referenceCode={d.referenceCode} />
+                      </div>
                     </td>
                   ) : null}
                 </tr>

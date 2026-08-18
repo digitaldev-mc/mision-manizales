@@ -42,6 +42,12 @@ const CLIENT_ID = appEnv.PAYPAL_CLIENT_ID;
 const CLIENT_SECRET = appEnv.PAYPAL_CLIENT_SECRET;
 const PAYPAL_ENV = appEnv.PAYPAL_ENV || "live";
 const WEBHOOK_ID = appEnv.PAYPAL_WEBHOOK_ID || "";
+const RESEND_API_KEY = appEnv.RESEND_API_KEY || "";
+const EMAIL_FROM = appEnv.EMAIL_FROM || "Misión Manizales <notificaciones@manizalescomparte.com>";
+const EMAIL_ADMIN_NOTIFY = appEnv.EMAIL_ADMIN_NOTIFY || "manizalescomparte@gmail.com";
+const SITE_URL = appEnv.NEXT_PUBLIC_SITE_URL?.startsWith("http://localhost")
+  ? "https://mision.manizalescomparte.com"
+  : appEnv.NEXT_PUBLIC_SITE_URL || "https://mision.manizalescomparte.com";
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   console.error("Faltan PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET en .env local");
@@ -64,6 +70,10 @@ updates = {
     "PAYPAL_CLIENT_SECRET": "${CLIENT_SECRET}",
     "NEXT_PUBLIC_PAYPAL_CLIENT_ID": "${CLIENT_ID}",
     "PAYPAL_WEBHOOK_ID": "${WEBHOOK_ID}",
+    "RESEND_API_KEY": "${RESEND_API_KEY}",
+    "EMAIL_FROM": "${EMAIL_FROM}",
+    "EMAIL_ADMIN_NOTIFY": "${EMAIL_ADMIN_NOTIFY}",
+    "NEXT_PUBLIC_SITE_URL": "${SITE_URL}",
 }
 for key, val in updates.items():
     line = f'{key}="{val}"'
@@ -72,7 +82,7 @@ for key, val in updates.items():
     else:
         text = text.rstrip() + "\\n" + line + "\\n"
 path.write_text(text)
-print("PayPal env actualizado en VPS")
+print("PayPal + email env actualizado en VPS")
 PY
 if [ -d .next/standalone ]; then cp .env .next/standalone/.env; fi
 pm2 delete mision-manizales 2>/dev/null || true
@@ -86,7 +96,7 @@ const conn = new Client();
 conn
   .on("ready", async () => {
     try {
-      console.log("Actualizando PayPal env + reiniciando PM2 en VPS...\n");
+      console.log("Actualizando PayPal + email env + reiniciando PM2 en VPS...\n");
       await exec(conn, patchCmd);
       console.log("\nListo.");
       conn.end();

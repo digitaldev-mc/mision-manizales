@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { paypalProvider } from "@/lib/payments/paypal";
-import { notifyDonationConfirmed } from "@/lib/email/notify-donation";
+import { donationToMailInput, notifyDonationConfirmed } from "@/lib/email/notify-donation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,14 +38,7 @@ export async function POST(request: NextRequest) {
     });
 
     try {
-      await notifyDonationConfirmed({
-        fullName: donation.fullName,
-        email: donation.email,
-        phone: donation.phone,
-        amountCOP: donation.amountCOP,
-        referenceCode: donation.referenceCode,
-        paymentMethod: donation.paymentMethod,
-      });
+      await notifyDonationConfirmed(donationToMailInput(donation));
     } catch (emailErr) {
       console.error("Email donación:", emailErr);
     }
