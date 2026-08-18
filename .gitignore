@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 public/assets/donaciones.mov
+public/uploads/
 
 # debug
 npm-debug.log*

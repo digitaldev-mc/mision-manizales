@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import { addProductAction, toggleProductAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -28,8 +29,7 @@ export default async function AdminProductosPage() {
             <textarea id="description" name="description" rows={3} placeholder="Detalle del producto" />
           </div>
           <div className="field full">
-            <label htmlFor="imageUrl">URL imagen (opcional)</label>
-            <input id="imageUrl" name="imageUrl" placeholder="/assets/empanada-foto.png" />
+            <AdminImageUpload name="imageUrl" folder="productos" label="Imagen del producto" />
           </div>
           <div className="full">
             <button type="submit" className="btn btn-primary">

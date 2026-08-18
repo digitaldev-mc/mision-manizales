@@ -4,6 +4,9 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin, signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
+import { notifyDonationConfirmed } from "@/lib/email/notify-donation";
+import { generateReferenceCode } from "@/lib/validation/donation";
+import { readUploadFile, savePublicUpload } from "@/lib/upload/save";
 import type { OrderStatus } from "@prisma/client";
 
 function slugify(text: string) {
@@ -17,7 +20,7 @@ function slugify(text: string) {
 
 export async function confirmDonationAction(id: string) {
   const user = await requireAdmin(["SUPERADMIN", "FINANZAS"]);
-  await prisma.donation.update({
+  const donation = await prisma.donation.update({
     where: { id },
     data: {
       status: "confirmed",
@@ -31,8 +34,75 @@ export async function confirmDonationAction(id: string) {
     action: "confirm",
     actorId: user.id,
   });
+  try {
+    await notifyDonationConfirmed({
+      fullName: donation.fullName,
+      email: donation.email,
+      phone: donation.phone,
+      amountCOP: donation.amountCOP,
+      referenceCode: donation.referenceCode,
+      paymentMethod: donation.paymentMethod,
+    });
+  } catch (err) {
+    console.error("Email donación:", err);
+  }
   revalidatePath("/admin/donaciones");
   revalidatePath("/admin");
+  revalidatePath("/");
+}
+
+export async function addManualDonationAction(formData: FormData) {
+  const user = await requireAdmin(["SUPERADMIN", "FINANZAS"]);
+  const amountCOP = Number(formData.get("amountCOP"));
+  const fullName = String(formData.get("fullName") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim() || "sin-correo@misionmanizales.org";
+  const phone = String(formData.get("phone") ?? "").trim() || "N/A";
+  const note = String(formData.get("note") ?? "").trim();
+  const paymentMethod = String(formData.get("paymentMethod") ?? "transferencia") as
+    | "paypal"
+    | "transferencia"
+    | "pse";
+
+  if (!Number.isFinite(amountCOP) || amountCOP <= 0 || !fullName) {
+    throw new Error("Monto y nombre son obligatorios");
+  }
+
+  const now = new Date();
+  await prisma.donation.create({
+    data: {
+      referenceCode: generateReferenceCode("MM-MAN"),
+      amountCOP,
+      amountOriginal: amountCOP,
+      currencyOriginal: "COP",
+      documentType: "CC",
+      documentNumber: "MANUAL",
+      fullName,
+      phone,
+      email,
+      address: note || "Registro manual admin",
+      dataConsentAt: now,
+      dataConsentIp: "admin",
+      licitOriginDeclaredAt: now,
+      paymentMethod: ["paypal", "transferencia", "pse"].includes(paymentMethod)
+        ? paymentMethod
+        : "transferencia",
+      status: "confirmed",
+      confirmedAt: now,
+      confirmedBy: user.id,
+    },
+  });
+
+  await writeAuditLog({
+    entity: "Donation",
+    entityId: "manual",
+    action: "create_manual",
+    actorId: user.id,
+    diff: { amountCOP, fullName },
+  });
+
+  revalidatePath("/admin/donaciones");
+  revalidatePath("/admin");
+  revalidatePath("/admin/termometro");
   revalidatePath("/");
 }
 
@@ -115,7 +185,13 @@ export async function addProductAction(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   const priceCOP = Number(formData.get("priceCOP"));
   const description = String(formData.get("description") ?? "").trim();
-  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || "/assets/empanada-foto.png";
+  let imageUrl = String(formData.get("imageUrl") ?? "").trim();
+
+  const file = await readUploadFile(formData, "image");
+  if (file) {
+    imageUrl = await savePublicUpload(file, "productos");
+  }
+  if (!imageUrl) imageUrl = "/assets/empanada-foto.png";
 
   if (!name || !Number.isFinite(priceCOP)) throw new Error("Datos inválidos");
 
@@ -167,8 +243,11 @@ export async function addEventAction(formData: FormData) {
 export async function addPartnerAction(formData: FormData) {
   await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
   const name = String(formData.get("name") ?? "").trim();
+  let logoUrl = String(formData.get("logoUrl") ?? "").trim() || null;
+  const file = await readUploadFile(formData, "logo");
+  if (file) logoUrl = await savePublicUpload(file, "aliados");
   if (!name) throw new Error("Nombre requerido");
-  await prisma.partner.create({ data: { name, active: true } });
+  await prisma.partner.create({ data: { name, logoUrl, active: true } });
   revalidatePath("/admin/contenido");
   revalidatePath("/");
 }
@@ -209,4 +288,69 @@ export async function updateOrderStatusAction(formData: FormData) {
 
 export async function logoutAction() {
   await signOut({ redirectTo: "/admin/login" });
+}
+
+type HistoriaGalleryData = { images: string[]; tag?: string };
+
+const defaultHistoriaGallery: HistoriaGalleryData = {
+  images: ["/assets/empanada-foto.png"],
+  tag: "🫓 Un gesto compartido",
+};
+
+export async function getHistoriaGalleryData(): Promise<HistoriaGalleryData> {
+  const block = await prisma.contentBlock.findUnique({ where: { section: "historia_galeria" } });
+  if (!block?.data) return defaultHistoriaGallery;
+  return { ...defaultHistoriaGallery, ...(block.data as HistoriaGalleryData) };
+}
+
+export async function appendHistoriaImageAction(formData: FormData) {
+  const user = await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
+  let imageUrl = String(formData.get("imageUrl") ?? "").trim();
+  const file = await readUploadFile(formData, "image");
+  if (file) imageUrl = await savePublicUpload(file, "historia");
+  if (!imageUrl) throw new Error("Imagen requerida");
+
+  const current = await getHistoriaGalleryData();
+  const images = [...current.images.filter((u) => u !== imageUrl), imageUrl];
+
+  await prisma.contentBlock.upsert({
+    where: { section: "historia_galeria" },
+    create: { section: "historia_galeria", data: { ...current, images }, updatedBy: user.id },
+    update: { data: { ...current, images }, updatedBy: user.id },
+  });
+
+  revalidatePath("/admin/contenido");
+  revalidatePath("/");
+}
+
+export async function deleteHistoriaImageAction(formData: FormData) {
+  const user = await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim();
+  const current = await getHistoriaGalleryData();
+  const images = current.images.filter((u) => u !== imageUrl);
+  if (images.length === 0) images.push("/assets/empanada-foto.png");
+
+  await prisma.contentBlock.upsert({
+    where: { section: "historia_galeria" },
+    create: { section: "historia_galeria", data: { ...current, images }, updatedBy: user.id },
+    update: { data: { ...current, images }, updatedBy: user.id },
+  });
+
+  revalidatePath("/admin/contenido");
+  revalidatePath("/");
+}
+
+export async function saveHistoriaTagAction(formData: FormData) {
+  const user = await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
+  const tag = String(formData.get("tag") ?? "").trim() || defaultHistoriaGallery.tag;
+  const current = await getHistoriaGalleryData();
+
+  await prisma.contentBlock.upsert({
+    where: { section: "historia_galeria" },
+    create: { section: "historia_galeria", data: { ...current, tag }, updatedBy: user.id },
+    update: { data: { ...current, tag }, updatedBy: user.id },
+  });
+
+  revalidatePath("/admin/contenido");
+  revalidatePath("/");
 }

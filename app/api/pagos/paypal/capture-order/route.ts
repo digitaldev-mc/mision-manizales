@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { paypalProvider } from "@/lib/payments/paypal";
+import { notifyDonationConfirmed } from "@/lib/email/notify-donation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,6 +36,19 @@ export async function POST(request: NextRequest) {
         confirmedAt: new Date(),
       },
     });
+
+    try {
+      await notifyDonationConfirmed({
+        fullName: donation.fullName,
+        email: donation.email,
+        phone: donation.phone,
+        amountCOP: donation.amountCOP,
+        referenceCode: donation.referenceCode,
+        paymentMethod: donation.paymentMethod,
+      });
+    } catch (emailErr) {
+      console.error("Email donación:", emailErr);
+    }
 
     return NextResponse.json({ ok: true, referenceCode: donation.referenceCode });
   } catch (error) {

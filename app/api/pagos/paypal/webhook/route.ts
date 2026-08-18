@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { paypalProvider } from "@/lib/payments/paypal";
-import {
-  sendAdminDonationNotify,
-  sendDonationConfirmedEmail,
-} from "@/lib/email/resend";
+import { notifyDonationConfirmed } from "@/lib/email/notify-donation";
 
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
@@ -51,20 +48,16 @@ export async function POST(request: NextRequest) {
       });
 
       try {
-        await sendDonationConfirmedEmail({
-          to: donation.email,
+        await notifyDonationConfirmed({
           fullName: donation.fullName,
-          amountCOP: donation.amountCOP,
-          referenceCode: donation.referenceCode,
-        });
-        await sendAdminDonationNotify({
-          fullName: donation.fullName,
+          email: donation.email,
+          phone: donation.phone,
           amountCOP: donation.amountCOP,
           referenceCode: donation.referenceCode,
           paymentMethod: donation.paymentMethod,
         });
       } catch (emailErr) {
-        console.error("Email error:", emailErr);
+        console.error("Email donación:", emailErr);
       }
     }
   }

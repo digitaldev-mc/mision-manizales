@@ -26,9 +26,20 @@ async function getThermometerSnapshot() {
   return { raisedCOP, donorCount: donationCount };
 }
 
+async function getHistoriaGallery() {
+  const block = await prisma.contentBlock.findUnique({ where: { section: "historia_galeria" } });
+  const data = (block?.data ?? {}) as { images?: string[]; tag?: string };
+  const images =
+    Array.isArray(data.images) && data.images.length > 0
+      ? data.images
+      : ["/assets/empanada-foto.png"];
+  return { images, tag: data.tag ?? "🫓 Un gesto compartido" };
+}
+
 export default async function Page() {
-  const [thermo, events, stories, partners, products] = await Promise.all([
+  const [thermo, historia, events, stories, partners, products] = await Promise.all([
     getThermometerSnapshot(),
+    getHistoriaGallery(),
     prisma.event.findMany({
       where: { published: true },
       orderBy: { date: "asc" },
@@ -54,6 +65,8 @@ export default async function Page() {
     <HomePage
       raisedCOP={thermo.raisedCOP}
       donorCount={thermo.donorCount}
+      historiaImages={historia.images}
+      historiaTag={historia.tag}
       events={events.map((e) => ({
         id: e.id,
         title: e.title,
@@ -67,7 +80,7 @@ export default async function Page() {
         videoUrl: s.videoUrl,
         description: s.description,
       }))}
-      partners={partners.map((p) => ({ id: p.id, name: p.name }))}
+      partners={partners.map((p) => ({ id: p.id, name: p.name, logoUrl: p.logoUrl }))}
       products={products.map((p) => ({
         id: p.id,
         name: p.name,

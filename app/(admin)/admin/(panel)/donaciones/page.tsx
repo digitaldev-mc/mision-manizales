@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { ConfirmDonationButton } from "@/components/admin/ConfirmDonationButton";
+import { addManualDonationAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,50 @@ export default async function AdminDonacionesPage() {
           </div>
         </div>
       </div>
+
+      {canConfirm ? (
+        <div className="admin-panel-card">
+          <h2>Registrar donación manual</h2>
+          <p style={{ color: "#7a8896", fontSize: "0.88rem", marginBottom: 16 }}>
+            Queda confirmada de inmediato y suma al termómetro del sitio.
+          </p>
+          <form action={addManualDonationAction} className="admin-form-grid">
+            <div className="field">
+              <label htmlFor="manual-name">Nombre del donante</label>
+              <input id="manual-name" name="fullName" required />
+            </div>
+            <div className="field">
+              <label htmlFor="manual-amount">Monto (COP)</label>
+              <input id="manual-amount" name="amountCOP" type="number" min={1000} step={1000} required />
+            </div>
+            <div className="field">
+              <label htmlFor="manual-email">Correo (opcional)</label>
+              <input id="manual-email" name="email" type="email" />
+            </div>
+            <div className="field">
+              <label htmlFor="manual-phone">Teléfono (opcional)</label>
+              <input id="manual-phone" name="phone" />
+            </div>
+            <div className="field">
+              <label htmlFor="manual-method">Método</label>
+              <select id="manual-method" name="paymentMethod" defaultValue="transferencia">
+                <option value="transferencia">Transferencia</option>
+                <option value="paypal">PayPal</option>
+                <option value="pse">PSE</option>
+              </select>
+            </div>
+            <div className="field full">
+              <label htmlFor="manual-note">Nota / referencia interna</label>
+              <input id="manual-note" name="note" placeholder="Ej. consignación Bancolombia 18/08" />
+            </div>
+            <div className="full">
+              <button type="submit" className="btn btn-primary">
+                Registrar donación confirmada
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
 
       <div className="admin-panel-card">
         <h2>Listado de donaciones</h2>

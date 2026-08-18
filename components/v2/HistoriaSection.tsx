@@ -1,4 +1,14 @@
-export function HistoriaSection() {
+import { HistoriaCarousel } from "./HistoriaCarousel";
+
+type HistoriaSectionProps = {
+  images?: string[];
+  tag?: string;
+};
+
+export function HistoriaSection({
+  images = ["/assets/empanada-foto.png"],
+  tag = "🫓 Un gesto compartido",
+}: HistoriaSectionProps) {
   return (
     <section className="historia" id="historia">
       <div className="wrap historia-grid">
@@ -21,14 +31,7 @@ export function HistoriaSection() {
           </p>
         </div>
         <div className="img-col reveal-scale">
-          <div className="historia-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/empanada-foto.png"
-              alt="Empanadas de Manizales, símbolo de reconstrucción colectiva"
-            />
-            <span className="historia-photo-tag">🫓 Un gesto compartido</span>
-          </div>
+          <HistoriaCarousel images={images} tag={tag} />
         </div>
       </div>
     </section>

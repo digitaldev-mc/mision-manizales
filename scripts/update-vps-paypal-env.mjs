@@ -41,6 +41,7 @@ const appEnv = loadEnvFile(path.join(root, ".env"));
 const CLIENT_ID = appEnv.PAYPAL_CLIENT_ID;
 const CLIENT_SECRET = appEnv.PAYPAL_CLIENT_SECRET;
 const PAYPAL_ENV = appEnv.PAYPAL_ENV || "live";
+const WEBHOOK_ID = appEnv.PAYPAL_WEBHOOK_ID || "";
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   console.error("Faltan PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET en .env local");
@@ -48,6 +49,8 @@ if (!CLIENT_ID || !CLIENT_SECRET) {
 }
 
 const patchCmd = `
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 cd ~/mision-manizales-src
 python3 - <<'PY'
 from pathlib import Path
@@ -60,6 +63,7 @@ updates = {
     "PAYPAL_CLIENT_ID": "${CLIENT_ID}",
     "PAYPAL_CLIENT_SECRET": "${CLIENT_SECRET}",
     "NEXT_PUBLIC_PAYPAL_CLIENT_ID": "${CLIENT_ID}",
+    "PAYPAL_WEBHOOK_ID": "${WEBHOOK_ID}",
 }
 for key, val in updates.items():
     line = f'{key}="{val}"'
@@ -70,13 +74,21 @@ for key, val in updates.items():
 path.write_text(text)
 print("PayPal env actualizado en VPS")
 PY
+if [ -d .next/standalone ]; then cp .env .next/standalone/.env; fi
+pm2 delete mision-manizales 2>/dev/null || true
+pm2 start scripts/ecosystem.config.js
+pm2 save
+sleep 2
+curl -sf http://127.0.0.1:8010/api/health && echo ""
 `.trim();
 
 const conn = new Client();
 conn
   .on("ready", async () => {
     try {
+      console.log("Actualizando PayPal env + reiniciando PM2 en VPS...\n");
       await exec(conn, patchCmd);
+      console.log("\nListo.");
       conn.end();
     } catch {
       conn.end();

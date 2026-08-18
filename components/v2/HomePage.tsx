@@ -15,6 +15,8 @@ import { useScrollReveal } from "./useScrollReveal";
 export type HomePageProps = {
   raisedCOP: number;
   donorCount: number;
+  historiaImages?: string[];
+  historiaTag?: string;
   events: Array<{
     id: string;
     title: string;
@@ -28,7 +30,7 @@ export type HomePageProps = {
     videoUrl: string | null;
     description: string;
   }>;
-  partners: Array<{ id: string; name: string }>;
+  partners: Array<{ id: string; name: string; logoUrl?: string | null }>;
   products: Array<{
     id: string;
     name: string;
@@ -42,6 +44,8 @@ export type HomePageProps = {
 export function HomePage({
   raisedCOP,
   donorCount,
+  historiaImages,
+  historiaTag,
   events,
   stories,
   partners,
@@ -55,7 +59,7 @@ export function HomePage({
       <ScrollProgress />
       <SiteNav />
       <HeroSection raisedCOP={raisedCOP} donorCount={donorCount} />
-      <HistoriaSection />
+      <HistoriaSection images={historiaImages} tag={historiaTag} />
       <EmpanadaGauge />
       <EncuentrosSection
         events={events.map((e) => ({ ...e, date: new Date(e.date) }))}

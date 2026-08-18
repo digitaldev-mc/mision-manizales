@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import {
   addStoryAction,
   addEventAction,
@@ -6,19 +7,67 @@ import {
   deleteStoryAction,
   deleteEventAction,
   deletePartnerAction,
+  appendHistoriaImageAction,
+  deleteHistoriaImageAction,
+  saveHistoriaTagAction,
+  getHistoriaGalleryData,
 } from "../actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminContenidoPage() {
-  const [stories, events, partners] = await Promise.all([
+  const [stories, events, partners, historia] = await Promise.all([
     prisma.story.findMany({ orderBy: { order: "asc" } }),
     prisma.event.findMany({ orderBy: { date: "desc" } }),
     prisma.partner.findMany({ orderBy: { order: "asc" } }),
+    getHistoriaGalleryData(),
   ]);
 
   return (
     <>
+      <div className="admin-panel-card">
+        <h2>Galería de la sección Historia</h2>
+        <p style={{ color: "#7a8896", fontSize: "0.88rem", marginBottom: 16 }}>
+          Imágenes del carrusel en la landing (cambian cada 5 segundos).
+        </p>
+        <form action={saveHistoriaTagAction} className="admin-form-grid" style={{ marginBottom: 20 }}>
+          <div className="field">
+            <label htmlFor="historia-tag">Etiqueta sobre la imagen</label>
+            <input id="historia-tag" name="tag" defaultValue={historia.tag} />
+          </div>
+          <div className="field" style={{ display: "flex", alignItems: "flex-end" }}>
+            <button type="submit" className="btn btn-outline btn-sm">
+              Guardar etiqueta
+            </button>
+          </div>
+        </form>
+        <form action={appendHistoriaImageAction} className="admin-form-grid">
+          <AdminImageUpload name="imageUrl" folder="historia" label="Subir imagen" />
+          <div className="field full">
+            <button type="submit" className="btn btn-primary btn-sm">
+              Agregar al carrusel
+            </button>
+          </div>
+        </form>
+        <div className="admin-row-list" style={{ marginTop: 20 }}>
+          {historia.images.map((url) => (
+            <div className="admin-item" key={url}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={url} alt="" style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 8 }} />
+                <code style={{ fontSize: "0.75rem" }}>{url}</code>
+              </div>
+              <form action={deleteHistoriaImageAction}>
+                <input type="hidden" name="imageUrl" value={url} />
+                <button type="submit" className="btn btn-danger btn-sm">
+                  Quitar
+                </button>
+              </form>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="admin-panel-card">
         <h2>Historias en video</h2>
         <form action={addStoryAction} className="admin-form-grid">
@@ -27,8 +76,12 @@ export default async function AdminContenidoPage() {
             <input id="story-title" name="title" required />
           </div>
           <div className="field">
-            <label htmlFor="story-video">URL video (YouTube)</label>
-            <input id="story-video" name="videoUrl" placeholder="https://youtube.com/..." />
+            <label htmlFor="story-video">Enlace (YouTube, Instagram, reel)</label>
+            <input
+              id="story-video"
+              name="videoUrl"
+              placeholder="https://youtube.com/... o https://instagram.com/reel/..."
+            />
           </div>
           <div className="field full">
             <label htmlFor="story-desc">Descripción</label>
@@ -45,7 +98,7 @@ export default async function AdminContenidoPage() {
             <div className="admin-item" key={s.id}>
               <div>
                 <strong>{s.title}</strong>
-                <div className="meta">{s.videoUrl ?? "Sin video"}</div>
+                <div className="meta">{s.videoUrl ?? "Sin enlace"}</div>
               </div>
               <form action={deleteStoryAction.bind(null, s.id)}>
                 <button type="submit" className="btn btn-danger btn-sm">
@@ -108,7 +161,8 @@ export default async function AdminContenidoPage() {
             <label htmlFor="partner-name">Nombre</label>
             <input id="partner-name" name="name" required />
           </div>
-          <div className="field" style={{ display: "flex", alignItems: "flex-end" }}>
+          <AdminImageUpload name="logoUrl" folder="aliados" label="Logo del aliado" />
+          <div className="full">
             <button type="submit" className="btn btn-primary btn-sm">
               Agregar aliado
             </button>
@@ -117,9 +171,15 @@ export default async function AdminContenidoPage() {
         <div className="admin-row-list" style={{ marginTop: 20 }}>
           {partners.map((p) => (
             <div className="admin-item" key={p.id}>
-              <div>
-                <strong>{p.name}</strong>
-                <div className="meta">{p.active ? "Visible" : "Oculto"}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                {p.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.logoUrl} alt="" style={{ width: 56, height: 40, objectFit: "contain" }} />
+                ) : null}
+                <div>
+                  <strong>{p.name}</strong>
+                  <div className="meta">{p.active ? "Visible" : "Oculto"}</div>
+                </div>
               </div>
               <form action={deletePartnerAction.bind(null, p.id)}>
                 <button type="submit" className="btn btn-danger btn-sm">
