@@ -186,41 +186,41 @@ header.nav.scrolled{box-shadow:0 8px 24px rgba(30,58,95,.1); background:rgba(248
 
 /* ---------- HERO ---------- */
 .hero{position:relative; overflow:hidden; background:var(--grad-noche); color:#fff; isolation:isolate;}
-.hero .blob{width:520px; height:520px; top:-160px; right:-140px; background:radial-gradient(circle, rgba(0,180,216,.55), transparent 65%);}
-.hero .blob2{width:420px; height:420px; bottom:-180px; left:-140px; background:radial-gradient(circle, rgba(244,197,66,.35), transparent 65%); animation-delay:-6s;}
-.hero-top{position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:20px; align-items:center; padding:64px 20px 20px; max-width:1200px; margin:0 auto;}
-.hero-headline-wrap{
-  position:relative; overflow:hidden; border-radius:28px; margin-bottom:24px;
-  box-shadow:0 28px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.12);
-  min-height:clamp(240px, 34vw, 360px);
+.hero .blob{width:520px; height:520px; top:-160px; right:-140px; background:radial-gradient(circle, rgba(0,180,216,.55), transparent 65%); z-index:1; pointer-events:none;}
+.hero .blob2{width:420px; height:420px; bottom:-180px; left:-140px; background:radial-gradient(circle, rgba(244,197,66,.35), transparent 65%); animation-delay:-6s; z-index:1; pointer-events:none;}
+.hero-banner-stage{
+  position:relative; z-index:2; width:100%; overflow:hidden;
+  min-height:clamp(320px, 52vh, 560px);
   display:flex; align-items:flex-end;
 }
 .hero-banner{position:absolute; inset:0; z-index:0;}
-.hero-banner-video{width:100%; height:100%; object-fit:cover; object-position:center 42%; transform:scale(1.02);}
+.hero-banner-video{width:100%; height:100%; object-fit:cover; object-position:center 40%;}
 .hero-banner-overlay{
   position:absolute; inset:0;
   background:
-    linear-gradient(115deg, rgba(8,18,34,.92) 0%, rgba(8,18,34,.78) 38%, rgba(8,18,34,.42) 68%, rgba(8,18,34,.28) 100%),
-    linear-gradient(to top, rgba(8,18,34,.55) 0%, transparent 45%);
+    linear-gradient(180deg, rgba(8,18,34,.35) 0%, rgba(8,18,34,.55) 45%, rgba(8,18,34,.88) 100%),
+    linear-gradient(90deg, rgba(8,18,34,.82) 0%, rgba(8,18,34,.45) 55%, rgba(8,18,34,.35) 100%);
 }
 .hero-banner-shine{
   position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(ellipse 80% 60% at 18% 20%, rgba(244,197,66,.18), transparent 55%);
+  background:radial-gradient(ellipse 70% 55% at 20% 15%, rgba(244,197,66,.16), transparent 60%);
 }
-.hero-headline-content{position:relative; z-index:1; padding:clamp(24px,4vw,36px) clamp(22px,4vw,34px); width:100%;}
+.hero-headline-content{
+  position:relative; z-index:1; width:100%; max-width:1200px; margin:0 auto;
+  padding:clamp(28px,5vw,48px) clamp(20px,4vw,32px) clamp(32px,6vw,56px);
+}
 .hero-headline{
-  font-size:clamp(2rem, 4.2vw, 3.45rem);
+  font-size:clamp(1.85rem, 4.8vw, 3.6rem);
   color:#fff;
-  line-height:1.08;
-  max-width:18ch;
+  line-height:1.12;
+  max-width:min(920px, 100%);
   text-wrap:balance;
   margin:0;
   letter-spacing:-.02em;
-  text-shadow:0 2px 24px rgba(0,0,0,.35);
+  text-shadow:0 2px 28px rgba(0,0,0,.45);
 }
 .hero-headline-line{display:block;}
-.hero-headline-line + .hero-headline-line{margin-top:.18em;}
+.hero-headline-line + .hero-headline-line{margin-top:.22em;}
 .hero-headline em{
   font-style:normal;
   background:var(--grad-gold-soft);
@@ -233,7 +233,8 @@ header.nav.scrolled{box-shadow:0 8px 24px rgba(30,58,95,.1); background:rgba(248
   display:inline-flex; align-items:center; gap:8px; background:rgba(244,197,66,.16); border:1px solid rgba(244,197,66,.5);
   color:var(--amarillo-maiz); padding:7px 16px; border-radius:999px; font-size:.74rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; margin-bottom:20px;
 }
-.hero-copy p{margin-top:18px; max-width:520px; color:rgba(255,255,255,.82); font-size:1.06rem;}
+.hero-top{position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:20px; align-items:center; padding:36px 20px 20px; max-width:1200px; margin:0 auto;}
+.hero-copy p{margin-top:0; max-width:520px; color:rgba(255,255,255,.82); font-size:1.06rem;}
 .hero-actions{display:flex; gap:14px; margin-top:30px; flex-wrap:wrap;}
 
 .hero-medal{position:relative; display:flex; align-items:center; justify-content:center; min-height:280px;}
@@ -245,7 +246,6 @@ header.nav.scrolled{box-shadow:0 8px 24px rgba(30,58,95,.1); background:rgba(248
 .medal-img{position:relative; width:210px; height:210px; border-radius:50%; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.4), 0 0 0 6px rgba(255,255,255,.08); animation:float 6s ease-in-out infinite;}
 .medal-img img{width:100%; height:100%; object-fit:cover; filter:sepia(.06);}
 @keyframes float{0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);}}
-.medal-badge{position:absolute; bottom:6px; right:calc(50% - 130px); background:var(--grad-gold); color:#3a2606; font-weight:800; font-size:.72rem; padding:6px 12px; border-radius:999px; box-shadow:0 8px 18px rgba(244,197,66,.5); display:flex; align-items:center; gap:6px;}
 
 .hero-strip{position:relative; z-index:2; border-top:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.03);}
 .hero-strip-inner{max-width:1200px; margin:0 auto; padding:16px 20px; display:flex; gap:28px; flex-wrap:wrap; justify-content:space-between;}
@@ -254,9 +254,9 @@ header.nav.scrolled{box-shadow:0 8px 24px rgba(30,58,95,.1); background:rgba(248
 .hero-stat span{font-size:.72rem; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.05em;}
 
 @media(max-width:920px){
-  .hero-top{grid-template-columns:1fr; padding:44px 20px 10px; text-align:left;}
-  .hero-headline-wrap{min-height:clamp(220px, 52vw, 300px); border-radius:22px; margin-bottom:20px;}
-  .hero-headline{max-width:none; font-size:clamp(1.85rem, 7vw, 2.55rem);}
+  .hero-banner-stage{min-height:clamp(300px, 58vh, 440px);}
+  .hero-top{grid-template-columns:1fr; padding:28px 20px 10px; text-align:left;}
+  .hero-headline{font-size:clamp(1.75rem, 6.8vw, 2.65rem); line-height:1.14;}
   .hero-medal{order:-1; min-height:220px; margin-bottom:6px;}
   .medal-glow{width:220px; height:220px;}
   .medal-ring{width:190px; height:190px;}
@@ -265,14 +265,9 @@ header.nav.scrolled{box-shadow:0 8px 24px rgba(30,58,95,.1); background:rgba(248
   .hero-actions .btn{flex:1 1 auto; justify-content:center;}
 }
 @media(max-width:520px){
-  .hero-headline-wrap{border-radius:18px;}
-  .hero-headline-content{padding:20px 18px;}
-  .hero-headline{font-size:clamp(1.72rem, 8.2vw, 2.2rem); line-height:1.12;}
-  .hero-copy h1{font-size:clamp(1.9rem,8vw,2.6rem);}
+  .hero-headline-content{padding:24px 18px 32px;}
+  .hero-headline{font-size:clamp(1.65rem, 7.5vw, 2.15rem); line-height:1.16;}
   .hero-stat strong{font-size:1.1rem;}
-}
-@media(min-width:768px){
-  .hero-headline-line{white-space:nowrap;}
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-banner-video{display:none;}
