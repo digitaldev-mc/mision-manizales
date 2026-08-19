@@ -16,7 +16,8 @@ npm install
 npm run build
 cp .env .next/standalone/.env
 cp -r .next/static .next/standalone/.next/static
-cp -r public .next/standalone/public
+mkdir -p public/uploads .next/standalone/public/uploads
+cp -r public/. .next/standalone/public/
 
 pm2 delete mision-manizales 2>/dev/null || true
 pm2 start scripts/ecosystem.config.js

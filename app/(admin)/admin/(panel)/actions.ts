@@ -213,10 +213,8 @@ export async function addProductAction(formData: FormData) {
   const description = String(formData.get("description") ?? "").trim();
   let imageUrl = String(formData.get("imageUrl") ?? "").trim();
 
-  const file = await readUploadFile(formData, "image");
-  if (file) {
-    imageUrl = await savePublicUpload(file, "productos");
-  }
+  const file = await readUploadFile(formData, "file");
+  if (file) imageUrl = await savePublicUpload(file, "productos");
   if (!imageUrl) imageUrl = "/assets/empanada-foto.png";
 
   if (!name || !Number.isFinite(priceCOP)) throw new Error("Datos inválidos");
@@ -270,7 +268,7 @@ export async function addPartnerAction(formData: FormData) {
   await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
   const name = String(formData.get("name") ?? "").trim();
   let logoUrl = String(formData.get("logoUrl") ?? "").trim() || null;
-  const file = await readUploadFile(formData, "logo");
+  const file = await readUploadFile(formData, "file");
   if (file) logoUrl = await savePublicUpload(file, "aliados");
   if (!name) throw new Error("Nombre requerido");
   await prisma.partner.create({ data: { name, logoUrl, active: true } });
@@ -332,9 +330,9 @@ export async function getHistoriaGalleryData(): Promise<HistoriaGalleryData> {
 export async function appendHistoriaImageAction(formData: FormData) {
   const user = await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
   let imageUrl = String(formData.get("imageUrl") ?? "").trim();
-  const file = await readUploadFile(formData, "image");
+  const file = await readUploadFile(formData, "file");
   if (file) imageUrl = await savePublicUpload(file, "historia");
-  if (!imageUrl) throw new Error("Imagen requerida");
+  if (!imageUrl) throw new Error("Selecciona una imagen antes de agregar al carrusel");
 
   const current = await getHistoriaGalleryData();
   const images = [...current.images.filter((u) => u !== imageUrl), imageUrl];

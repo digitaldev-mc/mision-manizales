@@ -41,8 +41,8 @@ export default async function AdminContenidoPage() {
             </button>
           </div>
         </form>
-        <form action={appendHistoriaImageAction} className="admin-form-grid">
-          <AdminImageUpload name="imageUrl" folder="historia" label="Subir imagen" />
+        <form action={appendHistoriaImageAction} className="admin-form-grid" encType="multipart/form-data">
+          <AdminImageUpload name="imageUrl" label="Subir imagen" />
           <div className="field full">
             <button type="submit" className="btn btn-primary btn-sm">
               Agregar al carrusel
@@ -156,12 +156,12 @@ export default async function AdminContenidoPage() {
 
       <div className="admin-panel-card">
         <h2>Aliados</h2>
-        <form action={addPartnerAction} className="admin-form-grid">
+        <form action={addPartnerAction} className="admin-form-grid" encType="multipart/form-data">
           <div className="field">
             <label htmlFor="partner-name">Nombre</label>
             <input id="partner-name" name="name" required />
           </div>
-          <AdminImageUpload name="logoUrl" folder="aliados" label="Logo del aliado" />
+          <AdminImageUpload name="logoUrl" label="Logo del aliado" />
           <div className="full">
             <button type="submit" className="btn btn-primary btn-sm">
               Agregar aliado

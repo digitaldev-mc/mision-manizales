@@ -15,7 +15,7 @@ export default async function AdminProductosPage() {
     <>
       <div className="admin-panel-card">
         <h2>Agregar producto</h2>
-        <form action={addProductAction} className="admin-form-grid">
+        <form action={addProductAction} className="admin-form-grid" encType="multipart/form-data">
           <div className="field">
             <label htmlFor="name">Nombre</label>
             <input id="name" name="name" required placeholder="Empanada solidaria" />
@@ -29,7 +29,7 @@ export default async function AdminProductosPage() {
             <textarea id="description" name="description" rows={3} placeholder="Detalle del producto" />
           </div>
           <div className="field full">
-            <AdminImageUpload name="imageUrl" folder="productos" label="Imagen del producto" />
+            <AdminImageUpload name="imageUrl" label="Imagen del producto" />
           </div>
           <div className="full">
             <button type="submit" className="btn btn-primary">
