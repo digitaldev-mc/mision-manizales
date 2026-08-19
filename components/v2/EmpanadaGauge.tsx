@@ -85,6 +85,8 @@ export function EmpanadaGauge() {
         <div className="termo-card reveal-scale">
           <div className="termo-tube-wrap">
             <div className="termometros-wrap">
+              <Empanadometro raised={raised} goal={goal} />
+
               <div className="gauge-svg-wrap">
                 <svg viewBox={EMPANADA_VIEWBOX} xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -137,8 +139,6 @@ export function EmpanadaGauge() {
                   />
                 ))}
               </div>
-
-              <Empanadometro raised={raised} goal={goal} />
             </div>
 
             <span className="termo-goal-label">

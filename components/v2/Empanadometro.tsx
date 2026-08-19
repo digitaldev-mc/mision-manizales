@@ -21,8 +21,8 @@ function ParticleUse({ p, animate }: { p: EmpmetroParticle; animate: boolean }) 
   useEffect(() => {
     if (!animate || !ref.current) return;
     const node = ref.current;
-    node.classList.remove("drop");
-    requestAnimationFrame(() => node.classList.add("drop"));
+    node.classList.remove("flow");
+    requestAnimationFrame(() => node.classList.add("flow"));
   }, [animate, p.id]);
 
   return (
@@ -38,6 +38,7 @@ function ParticleUse({ p, animate }: { p: EmpmetroParticle; animate: boolean }) 
           "--tx": `${p.tx.toFixed(2)}px`,
           "--ty": `${p.ty.toFixed(2)}px`,
           "--sx": `${p.sx.toFixed(2)}px`,
+          "--sy": `${p.sy.toFixed(2)}px`,
           "--s": p.s.toFixed(3),
           "--rot": `${p.rot.toFixed(1)}deg`,
           animationDelay: `${p.delay}ms`,
@@ -53,19 +54,14 @@ export function Empanadometro({ raised, goal }: { raised: number; goal: number }
   const raisedRef = useRef(raised);
   const goalRef = useRef(goal);
   const [particles, setParticles] = useState<EmpmetroParticle[]>([]);
-  const [realPct, setRealPct] = useState(0);
   const [animateKey, setAnimateKey] = useState(0);
 
   raisedRef.current = raised;
   goalRef.current = goal;
 
   const drop = useCallback(() => {
-    const { particles: next, realPct: pct } = buildEmpmetroParticles(
-      raisedRef.current,
-      goalRef.current,
-    );
+    const { particles: next } = buildEmpmetroParticles(raisedRef.current, goalRef.current);
     setParticles(next);
-    setRealPct(pct);
     setAnimateKey((k) => k + 1);
   }, []);
 
@@ -91,7 +87,7 @@ export function Empanadometro({ raised, goal }: { raised: number; goal: number }
 
   return (
     <div className="empanadometro" id="empanadometro" ref={containerRef}>
-      <svg viewBox="0 -40 220 540" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <svg viewBox="0 0 220 500" xmlns="http://www.w3.org/2000/svg" overflow="visible">
         <defs>
           <path id="emp-mini" d={EMP_MINI_PATH} />
           <clipPath id="empmetroChimney" clipPathUnits="userSpaceOnUse">
@@ -130,13 +126,6 @@ export function Empanadometro({ raised, goal }: { raised: number; goal: number }
           d={OUTLINE_PATH}
         />
       </svg>
-
-      <div className="empmetro-label">
-        <strong id="empmetro-pct">{realPct}%</strong>
-        <span>
-          de la meta · <span id="empmetro-count">{particles.length}</span> empanadas donadas
-        </span>
-      </div>
     </div>
   );
 }

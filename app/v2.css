@@ -320,11 +320,12 @@ section{padding:clamp(56px,9vw,96px) 0; position:relative;}
 }
 .termo-card{
   position:relative; background:var(--glass-light); border:1px solid var(--glass-light-border); backdrop-filter:blur(18px);
-  border-radius:var(--radius-lg); box-shadow:var(--shadow); padding:clamp(24px,4vw,44px);
-  display:grid; grid-template-columns:minmax(420px, 480px) 1fr; gap:clamp(24px,4vw,52px); align-items:center;
+  border-radius:var(--radius-lg); box-shadow:var(--shadow);
+  padding:clamp(16px,2.5vw,28px) clamp(24px,4vw,44px) clamp(24px,4vw,44px);
+  display:grid; grid-template-columns:minmax(380px, 440px) 1fr; gap:clamp(24px,4vw,52px); align-items:center;
 }
-.termo-tube-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; position:relative;}
-.termometros-wrap{display:flex; gap:48px; align-items:flex-end; justify-content:center; flex-wrap:wrap;}
+.termo-tube-wrap{display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;}
+.termometros-wrap{display:flex; gap:16px; align-items:flex-end; justify-content:center; flex-wrap:nowrap;}
 .gauge-svg-wrap{position:relative; width:190px; filter:drop-shadow(0 16px 26px rgba(30,58,95,.22));}
 .gauge-svg-wrap svg{width:100%; height:auto; display:block; overflow:visible;}
 #gauge-fill-rect{
@@ -354,30 +355,24 @@ section{padding:clamp(56px,9vw,96px) 0; position:relative;}
 @media(max-width:760px){
   .termo-card{grid-template-columns:1fr; text-align:center; padding:26px 20px;}
   .termo-tube-wrap{margin:0 auto;}
-  .termometros-wrap{gap:28px;}
+  .termometros-wrap{gap:12px;}
   .termo-stats{justify-content:center; gap:20px;}
   .gauge-svg-wrap{width:160px;}
   .empanadometro{width:160px;}
 }
 
 /* ---------- EMPANADÓMETRO ---------- */
-.empanadometro{width:190px; margin:0 auto; text-align:center;}
-.empanadometro svg{width:100%; height:auto; overflow:visible;}
-.empmetro-label{margin-top:14px; font-family:'Fraunces',serif;}
-.empmetro-label strong{
-  display:block; font-size:1.8rem; background:var(--grad-gold);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-}
-.empmetro-label span{font-family:'Work Sans',sans-serif; font-size:.8rem; color:#5a6875;}
+.empanadometro{width:190px; margin:0; flex-shrink:0;}
+.empanadometro svg{width:100%; height:auto; overflow:visible; display:block;}
 .empmetro-particle{transform-box:fill-box; transform-origin:50% 50%; opacity:0;}
-.empmetro-particle.drop{animation:empmetroDrop 1.15s cubic-bezier(.25,.46,.45,.94) forwards;}
-@keyframes empmetroDrop{
-  0%{transform:translate(var(--sx), -480px) scale(var(--s)) rotate(0deg); opacity:0;}
-  8%{opacity:1;}
+.empmetro-particle.flow{animation:empmetroFlow 2.8s cubic-bezier(.22,.61,.36,1) forwards;}
+@keyframes empmetroFlow{
+  0%{transform:translate(var(--sx), var(--sy)) scale(var(--s)) rotate(0deg); opacity:0;}
+  10%{opacity:1;}
   100%{transform:translate(var(--tx), var(--ty)) scale(var(--s)) rotate(var(--rot)); opacity:1;}
 }
 @media (prefers-reduced-motion: reduce){
-  .empmetro-particle.drop{animation-duration:.01ms;}
+  .empmetro-particle.flow{animation-duration:.01ms;}
 }
 
 /* ---------- BANNER ENCUENTROS ---------- */

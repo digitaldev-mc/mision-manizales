@@ -11,6 +11,7 @@ export type EmpmetroParticle = {
   tx: number;
   ty: number;
   sx: number;
+  sy: number;
   s: number;
   rot: number;
   delay: number;
@@ -93,10 +94,11 @@ export function buildEmpmetroParticles(
       id: i,
       tx,
       ty,
-      sx: tx + (Math.random() * 14 - 7),
+      sx: tx + 130 + Math.random() * 90,
+      sy: ty + (Math.random() * 10 - 5),
       s: p.s,
       rot: p.rot,
-      delay: Math.floor(i / 6) * 90 + (i % 6) * 22,
+      delay: Math.floor(i / 5) * 180 + (i % 5) * 55,
     };
   });
 
