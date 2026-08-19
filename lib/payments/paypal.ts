@@ -31,6 +31,11 @@ async function getAccessToken(): Promise<string> {
   return data.access_token;
 }
 
+function formatPayPalAmount(amount: number, currency: string): string {
+  if (currency === "COP") return Math.round(amount).toString();
+  return Number(amount).toFixed(2);
+}
+
 export const paypalProvider: PaymentProvider = {
   async createOrder({ amount, currency, referenceCode }) {
     const token = await getAccessToken();
@@ -47,7 +52,7 @@ export const paypalProvider: PaymentProvider = {
             reference_id: referenceCode,
             amount: {
               currency_code: currency,
-              value: currency === "USD" ? (amount / 100).toFixed(2) : Number(amount).toFixed(2),
+              value: formatPayPalAmount(amount, currency),
             },
           },
         ],

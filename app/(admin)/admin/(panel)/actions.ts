@@ -331,7 +331,7 @@ export async function appendHistoriaImageAction(formData: FormData) {
   const user = await requireAdmin(["SUPERADMIN", "CONTENIDO"]);
   let imageUrl = String(formData.get("imageUrl") ?? "").trim();
   const file = await readUploadFile(formData, "file");
-  if (file) imageUrl = await savePublicUpload(file, "historia");
+  if (file) imageUrl = await savePublicUpload(file, "historia", { optimize: "carousel" });
   if (!imageUrl) throw new Error("Selecciona una imagen antes de agregar al carrusel");
 
   const current = await getHistoriaGalleryData();

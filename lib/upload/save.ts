@@ -7,6 +7,7 @@ import {
   MIME_TO_EXT,
   NAME_TO_EXT,
 } from "@/lib/upload/constants";
+import { optimizeImageBuffer, optimizeProfileForFolder, type OptimizeProfile } from "@/lib/upload/optimize";
 
 export { IMAGE_ACCEPT, IMAGE_FORMATS_LABEL } from "@/lib/upload/constants";
 
@@ -38,7 +39,11 @@ function uploadDirs(folder: string): string[] {
   return dirs;
 }
 
-export async function savePublicUpload(file: File, folder: string): Promise<string> {
+export async function savePublicUpload(
+  file: File,
+  folder: string,
+  options?: { optimize?: OptimizeProfile | boolean },
+): Promise<string> {
   if (!file || file.size === 0) {
     throw new Error("Archivo vacío");
   }
@@ -47,10 +52,26 @@ export async function savePublicUpload(file: File, folder: string): Promise<stri
     throw new Error("La imagen no puede superar 8 MB");
   }
 
-  const ext = resolveImageExtension(file);
+  let ext = resolveImageExtension(file);
   const safeFolder = folder.replace(/[^a-z0-9-_]/gi, "");
+  let buffer = Buffer.from(await file.arrayBuffer());
+
+  const profile: OptimizeProfile =
+    options?.optimize === true
+      ? optimizeProfileForFolder(safeFolder)
+      : options?.optimize === false
+        ? "none"
+        : typeof options?.optimize === "string"
+          ? options.optimize
+          : optimizeProfileForFolder(safeFolder);
+
+  if (profile !== "none") {
+    const optimized = await optimizeImageBuffer(buffer, ext, profile);
+    buffer = Buffer.from(optimized.buffer);
+    ext = optimized.ext;
+  }
+
   const filename = `${randomUUID()}${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
 
   for (const dir of uploadDirs(safeFolder)) {
     await mkdir(dir, { recursive: true });

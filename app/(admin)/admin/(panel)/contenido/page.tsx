@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { HistoriaImageForm } from "@/components/admin/HistoriaImageForm";
 import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import {
   addStoryAction,
@@ -7,7 +8,6 @@ import {
   deleteStoryAction,
   deleteEventAction,
   deletePartnerAction,
-  appendHistoriaImageAction,
   deleteHistoriaImageAction,
   saveHistoriaTagAction,
   getHistoriaGalleryData,
@@ -41,14 +41,7 @@ export default async function AdminContenidoPage() {
             </button>
           </div>
         </form>
-        <form action={appendHistoriaImageAction} className="admin-form-grid" encType="multipart/form-data">
-          <AdminImageUpload name="imageUrl" label="Subir imagen" />
-          <div className="field full">
-            <button type="submit" className="btn btn-primary btn-sm">
-              Agregar al carrusel
-            </button>
-          </div>
-        </form>
+        <HistoriaImageForm />
         <div className="admin-row-list" style={{ marginTop: 20 }}>
           {historia.images.map((url) => (
             <div className="admin-item" key={url}>
