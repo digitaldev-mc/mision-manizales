@@ -48,6 +48,9 @@ const EMAIL_ADMIN_NOTIFY = appEnv.EMAIL_ADMIN_NOTIFY || "manizalescomparte@gmail
 const SITE_URL = appEnv.NEXT_PUBLIC_SITE_URL?.startsWith("http://localhost")
   ? "https://mision.manizalescomparte.com"
   : appEnv.NEXT_PUBLIC_SITE_URL || "https://mision.manizalescomparte.com";
+const BOLD_IDENTITY_KEY = appEnv.BOLD_IDENTITY_KEY || "";
+const BOLD_SECRET_KEY = appEnv.BOLD_SECRET_KEY || "";
+const NEXT_PUBLIC_BOLD_IDENTITY_KEY = BOLD_IDENTITY_KEY;
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
   console.error("Faltan PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET en .env local");
@@ -74,6 +77,9 @@ updates = {
     "EMAIL_FROM": "${EMAIL_FROM}",
     "EMAIL_ADMIN_NOTIFY": "${EMAIL_ADMIN_NOTIFY}",
     "NEXT_PUBLIC_SITE_URL": "${SITE_URL}",
+    "BOLD_IDENTITY_KEY": "${BOLD_IDENTITY_KEY}",
+    "BOLD_SECRET_KEY": "${BOLD_SECRET_KEY}",
+    "NEXT_PUBLIC_BOLD_IDENTITY_KEY": "${NEXT_PUBLIC_BOLD_IDENTITY_KEY}",
 }
 for key, val in updates.items():
     line = f'{key}="{val}"'

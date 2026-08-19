@@ -88,7 +88,7 @@ function paymentLabel(method: string) {
   const labels: Record<string, string> = {
     paypal: "PayPal",
     transferencia: "Transferencia bancaria",
-    pse: "PSE",
+    pse: "Bold (PSE / tarjeta / Nequi)",
   };
   return labels[method] ?? method;
 }

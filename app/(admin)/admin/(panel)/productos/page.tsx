@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
-import { addProductAction, toggleProductAction } from "../actions";
+import { AddProductForm } from "@/components/admin/AddProductForm";
+import { toggleProductAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -15,28 +15,7 @@ export default async function AdminProductosPage() {
     <>
       <div className="admin-panel-card">
         <h2>Agregar producto</h2>
-        <form action={addProductAction} className="admin-form-grid" encType="multipart/form-data">
-          <div className="field">
-            <label htmlFor="name">Nombre</label>
-            <input id="name" name="name" required placeholder="Empanada solidaria" />
-          </div>
-          <div className="field">
-            <label htmlFor="priceCOP">Precio (COP)</label>
-            <input id="priceCOP" name="priceCOP" type="number" min={1000} step={500} required />
-          </div>
-          <div className="field full">
-            <label htmlFor="description">Descripción</label>
-            <textarea id="description" name="description" rows={3} placeholder="Detalle del producto" />
-          </div>
-          <div className="field full">
-            <AdminImageUpload name="imageUrl" label="Imagen del producto" />
-          </div>
-          <div className="full">
-            <button type="submit" className="btn btn-primary">
-              Crear producto
-            </button>
-          </div>
-        </form>
+        <AddProductForm />
       </div>
 
       <div className="admin-panel-card">

@@ -55,7 +55,7 @@ export function PayGateways({ value, onChange }: PayGatewaysProps) {
           <p className="pgw-desc">PSE, tarjeta o Nequi.</p>
         </button>
       </div>
-      <input type="hidden" name="paymentMethod" value={value === "bold" ? "transferencia" : "paypal"} />
+      <input type="hidden" name="paymentMethod" value={value === "bold" ? "pse" : "paypal"} />
     </>
   );
 }

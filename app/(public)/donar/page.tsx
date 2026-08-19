@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { PayGateways } from "@/components/v2/PayGateways";
 import { PayPalCheckout } from "@/components/v2/PayPalCheckout";
+import { BoldCheckout } from "@/components/v2/BoldCheckout";
 import { SiteFooter } from "@/components/v2/SiteFooter";
 import { SiteNav } from "@/components/v2/SiteNav";
 import { ScrollProgress } from "@/components/v2/SiteLoader";
@@ -14,7 +15,7 @@ type PendingDonation = {
   donationId: string;
   referenceCode: string;
   amountCOP: number;
-  paymentMethod: "paypal" | "transferencia";
+  paymentMethod: "paypal" | "pse";
 };
 
 export default function DonarPage() {
@@ -31,7 +32,7 @@ export default function DonarPage() {
     setError("");
 
     const form = new FormData(e.currentTarget);
-    const paymentMethod = payMethod === "bold" ? "transferencia" : "paypal";
+    const paymentMethod = payMethod === "bold" ? "pse" : "paypal";
     const payload = {
       amountCOP: Number(form.get("amountCOP")),
       documentType: form.get("documentType"),
@@ -70,7 +71,12 @@ export default function DonarPage() {
         return;
       }
 
-      router.push(`/gracias?ref=${data.referenceCode}&metodo=transferencia`);
+      setPending({
+        donationId: data.donationId,
+        referenceCode: data.referenceCode,
+        amountCOP: payload.amountCOP,
+        paymentMethod: "pse",
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error inesperado");
     } finally {
@@ -88,26 +94,44 @@ export default function DonarPage() {
         </Link>
         <div className="modal" style={{ position: "relative", maxWidth: 640, margin: "0 auto" }}>
           <div className="modal-head" style={{ borderRadius: "var(--radius) var(--radius) 0 0" }}>
-            <h3>{pending ? "Completa tu pago con PayPal" : "Aportar a la reconstrucción"}</h3>
+            <h3>
+              {pending
+                ? pending.paymentMethod === "pse"
+                  ? "Completa tu pago con Bold"
+                  : "Completa tu pago con PayPal"
+                : "Aportar a la reconstrucción"}
+            </h3>
           </div>
           <div style={{ padding: "24px 28px 28px" }}>
             {pending ? (
               <>
                 <p style={{ color: "#5a6875", marginBottom: 20 }}>
-                  Tu donación quedó registrada. Finaliza el pago con PayPal para confirmarla.
+                  {pending.paymentMethod === "pse"
+                    ? "Tu donación quedó registrada. Finaliza el pago con Bold (PSE, tarjeta, Nequi…)."
+                    : "Tu donación quedó registrada. Finaliza el pago con PayPal para confirmarla."}
                 </p>
                 {error ? (
                   <p className="err" style={{ display: "block", marginBottom: 16 }}>
                     {error}
                   </p>
                 ) : null}
-                <PayPalCheckout
-                  donationId={pending.donationId}
-                  referenceCode={pending.referenceCode}
-                  amountCOP={pending.amountCOP}
-                  onSuccess={(ref) => router.push(`/gracias?ref=${ref}&metodo=paypal`)}
-                  onError={setError}
-                />
+                {pending.paymentMethod === "pse" ? (
+                  <BoldCheckout
+                    donationId={pending.donationId}
+                    referenceCode={pending.referenceCode}
+                    amountCOP={pending.amountCOP}
+                    onSuccess={(ref) => router.push(`/gracias?ref=${ref}&metodo=bold&bold-tx-status=approved`)}
+                    onError={setError}
+                  />
+                ) : (
+                  <PayPalCheckout
+                    donationId={pending.donationId}
+                    referenceCode={pending.referenceCode}
+                    amountCOP={pending.amountCOP}
+                    onSuccess={(ref) => router.push(`/gracias?ref=${ref}&metodo=paypal`)}
+                    onError={setError}
+                  />
+                )}
                 <button
                   type="button"
                   className="btn btn-outline btn-block"
@@ -194,7 +218,7 @@ export default function DonarPage() {
                     </p>
                   ) : null}
                   <button className="btn btn-primary btn-block" type="submit" disabled={loading}>
-                    {loading ? "Registrando…" : payMethod === "paypal" ? "Continuar a PayPal" : "Confirmar donación"}
+                    {loading ? "Registrando…" : payMethod === "paypal" ? "Continuar a PayPal" : "Continuar a Bold"}
                   </button>
                 </form>
               </>
