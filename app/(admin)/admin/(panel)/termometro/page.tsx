@@ -68,21 +68,25 @@ export default async function AdminTermometroPage() {
             <input
               id="goalCOP"
               name="goalCOP"
-              type="number"
-              min={1}
-              step={1000000}
+              type="text"
+              inputMode="numeric"
               defaultValue={goalCOP}
+              placeholder="Ej. 500000000 o 500.000.000"
               required
             />
+            <p style={{ fontSize: "0.78rem", color: "#7a8896", marginTop: 6 }}>
+              Cualquier monto entero en pesos colombianos, con o sin puntos.
+            </p>
           </div>
           <div className="field">
             <label htmlFor="manualAdjustCOP">Ajuste manual (COP)</label>
             <input
               id="manualAdjustCOP"
               name="manualAdjustCOP"
-              type="number"
-              step={10000}
+              type="text"
+              inputMode="numeric"
               defaultValue={manualAdjustCOP}
+              placeholder="0"
             />
           </div>
           <div className="full">

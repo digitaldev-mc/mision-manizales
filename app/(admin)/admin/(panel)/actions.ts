@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin, signOut } from "@/lib/auth";
+import { parseCopInput } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { donationToMailInput, notifyDonationConfirmed } from "@/lib/email/notify-donation";
@@ -134,17 +135,25 @@ export async function addManualDonationAction(formData: FormData) {
 
 export async function updateThermometerAction(formData: FormData) {
   const user = await requireAdmin(["SUPERADMIN"]);
-  const goalCOP = Number(formData.get("goalCOP"));
-  const manualAdjustCOP = Number(formData.get("manualAdjustCOP"));
+  const goalCOP = parseCopInput(formData.get("goalCOP"));
+  const manualRaw = formData.get("manualAdjustCOP");
+  const manualAdjustCOP =
+    manualRaw === null || String(manualRaw).trim() === ""
+      ? 0
+      : parseCopInput(manualRaw, { allowZero: true, allowNegative: true });
 
-  if (!Number.isFinite(goalCOP) || goalCOP <= 0) {
-    throw new Error("Meta inválida");
+  if (!Number.isFinite(goalCOP)) {
+    throw new Error("Meta inválida. Usa un número entero en pesos (ej. 500000000 o 500.000.000).");
+  }
+
+  if (!Number.isFinite(manualAdjustCOP)) {
+    throw new Error("Ajuste manual inválido.");
   }
 
   await prisma.thermometerSetting.upsert({
     where: { id: 1 },
-    create: { id: 1, goalCOP, manualAdjustCOP: manualAdjustCOP || 0 },
-    update: { goalCOP, manualAdjustCOP: manualAdjustCOP || 0, updatedBy: user.id },
+    create: { id: 1, goalCOP, manualAdjustCOP },
+    update: { goalCOP, manualAdjustCOP, updatedBy: user.id },
   });
 
   await writeAuditLog({

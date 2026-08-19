@@ -13,10 +13,7 @@ export function HistoriaSection({
     <section className="historia" id="historia">
       <div className="wrap historia-grid">
         <div className="reveal">
-          <span className="section-head kicker" style={{ display: "inline-flex" }}>
-            Verdad de marca
-          </span>
-          <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.2rem)", margin: "10px 0 16px" }}>
+          <h2 style={{ fontSize: "clamp(1.6rem,3vw,2.2rem)", margin: "0 0 16px" }}>
             La reconstrucción no empieza con una gran obra.
           </h2>
           <blockquote>Empieza cuando todos deciden aportar algo.</blockquote>
