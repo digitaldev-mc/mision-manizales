@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 type BoldCheckoutProps = {
-  donationId: string;
+  donationId?: string;
+  orderId?: string;
   referenceCode: string;
   amountCOP: number;
   onSuccess: (referenceCode: string) => void;
@@ -35,6 +36,7 @@ function clickBoldButton(root: HTMLElement) {
 
 export function BoldCheckout({
   donationId,
+  orderId,
   referenceCode,
   amountCOP,
   onSuccess,
@@ -54,7 +56,7 @@ export function BoldCheckout({
         const res = await fetch("/api/pagos/bold/checkout-data", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ donationId }),
+          body: JSON.stringify(orderId ? { orderId } : { donationId }),
         });
         const data = (await res.json()) as CheckoutData & { error?: string };
         if (!res.ok) throw new Error(data.error ?? "Error al preparar Bold");
@@ -127,7 +129,7 @@ export function BoldCheckout({
       if (openTimer) clearTimeout(openTimer);
       void cleanupMessage;
     };
-  }, [donationId, onError, onSuccess, referenceCode]);
+  }, [donationId, orderId, onError, onSuccess, referenceCode]);
 
   return (
     <div className="bold-checkout-box payment-gateway-box">

@@ -56,7 +56,7 @@ export function HistoriaImageForm() {
       <div className="field full" key={uploadKey}>
         <AdminImageUpload name="imageUrl" label="Subir imagen" />
         <p style={{ fontSize: "0.78rem", color: "#7a8896", marginTop: 6 }}>
-          Se optimiza automáticamente (WebP, máx. 1920px) al agregar al carrusel.
+          Se optimiza automáticamente (JPG, máx. 1920px) al agregar al carrusel.
         </p>
       </div>
       {error ? (

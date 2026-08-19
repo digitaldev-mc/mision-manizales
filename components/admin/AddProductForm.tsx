@@ -36,6 +36,7 @@ export function AddProductForm() {
       body.append("name", String(new FormData(form).get("name") ?? ""));
       body.append("priceCOP", String(new FormData(form).get("priceCOP") ?? ""));
       body.append("description", String(new FormData(form).get("description") ?? ""));
+      body.append("thermometerPercent", String(new FormData(form).get("thermometerPercent") ?? "20"));
       body.append("file", file);
 
       const res = await fetch("/api/admin/products", { method: "POST", body });
@@ -75,6 +76,20 @@ export function AddProductForm() {
           type="number"
           min={1000}
           step={500}
+          required
+          disabled={busy}
+        />
+      </div>
+      <div className="field">
+        <label htmlFor="thermometerPercent">% al empanadómetro</label>
+        <input
+          id="thermometerPercent"
+          name="thermometerPercent"
+          type="number"
+          min={0}
+          max={100}
+          step={1}
+          defaultValue={20}
           required
           disabled={busy}
         />

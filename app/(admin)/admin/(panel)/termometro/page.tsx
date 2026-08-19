@@ -17,14 +17,15 @@ export default async function AdminTermometroPage() {
     }),
     prisma.order.aggregate({
       where: { status: { in: ["paid", "preparing", "shipped", "delivered"] } },
-      _sum: { totalCOP: true },
+      _sum: { thermometerContributionCOP: true, totalCOP: true },
     }),
   ]);
 
   const goalCOP = settings?.goalCOP ?? 500_000_000;
   const manualAdjustCOP = settings?.manualAdjustCOP ?? 0;
   const fromDonations = donations._sum.amountCOP ?? 0;
-  const fromOrders = orders._sum.totalCOP ?? 0;
+  const fromOrders = orders._sum.thermometerContributionCOP ?? 0;
+  const fromOrdersTotal = orders._sum.totalCOP ?? 0;
   const raisedCOP = fromDonations + fromOrders + manualAdjustCOP;
   const percent = goalCOP > 0 ? Math.min(100, Math.round((raisedCOP / goalCOP) * 100)) : 0;
 
@@ -52,14 +53,14 @@ export default async function AdminTermometroPage() {
         <div className="admin-stat-card">
           <div className="label">Tienda</div>
           <div className="value">{cop(fromOrders)}</div>
-          <div className="hint">Ajuste manual: {cop(manualAdjustCOP)}</div>
+          <div className="hint">Ventas: {cop(fromOrdersTotal)} · Aporte termómetro: {cop(fromOrders)}</div>
         </div>
       </div>
 
       <div className="admin-panel-card">
         <h2>Configurar termómetro</h2>
         <p style={{ color: "#7a8896", fontSize: "0.88rem", marginBottom: 20 }}>
-          El termómetro del sitio suma donaciones confirmadas, pedidos pagados y el ajuste manual que definas aquí.
+          El termómetro suma donaciones confirmadas, el aporte de tienda (según % por producto) y el ajuste manual.
         </p>
         <form action={updateThermometerAction} className="admin-form-grid">
           <div className="field">

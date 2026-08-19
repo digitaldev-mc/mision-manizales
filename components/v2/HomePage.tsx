@@ -38,6 +38,7 @@ export type HomePageProps = {
     priceCOP: number;
     imageUrl: string;
     soldOut: boolean;
+    thermometerPercent: number;
   }>;
 };
 

@@ -26,6 +26,7 @@ export default async function AdminProductosPage() {
               <tr>
                 <th>Producto</th>
                 <th>Precio</th>
+                <th>% Termómetro</th>
                 <th>Stock</th>
                 <th>Estado</th>
                 <th>Acción</th>
@@ -49,6 +50,7 @@ export default async function AdminProductosPage() {
                     </div>
                   </td>
                   <td>{cop(p.priceCOP)}</td>
+                  <td>{p.thermometerPercent}%</td>
                   <td>{p.stock}</td>
                   <td>
                     <span className={`badge ${p.active ? "badge-confirmed" : "badge-failed"}`}>

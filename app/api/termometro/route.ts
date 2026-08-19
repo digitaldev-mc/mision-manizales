@@ -13,7 +13,7 @@ async function computeThermometer() {
     prisma.thermometerSetting.findUnique({ where: { id: 1 } }),
     prisma.order.aggregate({
       where: { status: { in: ["paid", "preparing", "shipped", "delivered"] } },
-      _sum: { totalCOP: true },
+      _sum: { thermometerContributionCOP: true },
     }),
     prisma.donation.count({ where: { status: "confirmed" } }),
   ]);
@@ -22,7 +22,7 @@ async function computeThermometer() {
   const manualAdjustCOP = settings?.manualAdjustCOP ?? 0;
   const raisedCOP =
     (donations._sum.amountCOP ?? 0) +
-    (paidOrders._sum.totalCOP ?? 0) +
+    (paidOrders._sum.thermometerContributionCOP ?? 0) +
     manualAdjustCOP;
 
   return {

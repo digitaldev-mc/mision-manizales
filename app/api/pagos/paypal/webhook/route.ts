@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { paypalProvider } from "@/lib/payments/paypal";
 import { donationToMailInput, notifyDonationConfirmed } from "@/lib/email/notify-donation";
+import { confirmStoreOrderByReference } from "@/lib/orders/confirm";
 
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
@@ -52,6 +53,14 @@ export async function POST(request: NextRequest) {
       } catch (emailErr) {
         console.error("Email donación:", emailErr);
       }
+    }
+
+    const storeOrder = await prisma.order.findFirst({
+      where: { providerOrderId: parsed.providerOrderId },
+    });
+
+    if (storeOrder && storeOrder.status === "pending") {
+      await confirmStoreOrderByReference(storeOrder.referenceCode, parsed.providerOrderId);
     }
   }
 

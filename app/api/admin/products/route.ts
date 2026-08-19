@@ -44,12 +44,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "La imagen del producto es obligatoria" }, { status: 400 });
     }
 
+    const thermometerPercent = Number(formData.get("thermometerPercent") ?? 20);
+    const safeThermo =
+      Number.isFinite(thermometerPercent) && thermometerPercent >= 0 && thermometerPercent <= 100
+        ? Math.round(thermometerPercent)
+        : 20;
+
     let slug = slugify(name);
     const existing = await prisma.product.findUnique({ where: { slug } });
     if (existing) slug = `${slug}-${Date.now().toString(36)}`;
 
     const product = await prisma.product.create({
-      data: { name, slug, priceCOP, description, imageUrl, active: true },
+      data: {
+        name,
+        slug,
+        priceCOP,
+        description,
+        imageUrl,
+        active: true,
+        thermometerPercent: safeThermo,
+      },
     });
 
     revalidatePath("/admin/productos");

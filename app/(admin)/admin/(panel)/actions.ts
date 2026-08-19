@@ -269,7 +269,7 @@ export async function addPartnerAction(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   let logoUrl = String(formData.get("logoUrl") ?? "").trim() || null;
   const file = await readUploadFile(formData, "file");
-  if (file) logoUrl = await savePublicUpload(file, "aliados");
+  if (file) logoUrl = await savePublicUpload(file, "aliados", { optimize: "logo" });
   if (!name) throw new Error("Nombre requerido");
   await prisma.partner.create({ data: { name, logoUrl, active: true } });
   revalidatePath("/admin/contenido");

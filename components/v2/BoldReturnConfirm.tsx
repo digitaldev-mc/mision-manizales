@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 export function BoldReturnConfirm({
   reference,
   txStatus,
+  isStore = false,
 }: {
   reference?: string;
   txStatus?: string;
+  isStore?: boolean;
 }) {
   const [message, setMessage] = useState<string | null>(null);
 
@@ -20,15 +22,23 @@ export function BoldReturnConfirm({
       body: JSON.stringify({ referenceCode: reference, txStatus }),
     })
       .then(async (res) => {
-        const data = (await res.json()) as { status?: string; error?: string };
+        const data = (await res.json()) as { status?: string; error?: string; type?: string };
         if (data.status === "confirmed") {
-          setMessage("Tu pago con Bold quedó confirmado. ¡Gracias por tu aporte!");
+          setMessage(
+            isStore
+              ? "Tu pago con Bold quedó confirmado. ¡Gracias por apoyar Misión Comparte!"
+              : "Tu pago con Bold quedó confirmado. ¡Gracias por tu aporte!",
+          );
         } else if (txStatus.toLowerCase() !== "approved") {
-          setMessage("El pago no se completó. Puedes intentar de nuevo desde Donar.");
+          setMessage(
+            isStore
+              ? "El pago no se completó. Puedes intentar de nuevo desde el carrito."
+              : "El pago no se completó. Puedes intentar de nuevo desde Donar.",
+          );
         }
       })
       .catch(() => {});
-  }, [reference, txStatus]);
+  }, [reference, txStatus, isStore]);
 
   if (!message) return null;
 

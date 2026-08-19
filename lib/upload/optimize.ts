@@ -62,7 +62,7 @@ export async function optimizeImageBuffer(
     let optimized: Buffer;
     let outExt: string;
 
-    if (profile === "product") {
+    if (profile === "product" || profile === "carousel") {
       optimized = await pipeline.jpeg({ quality: cfg.quality, mozjpeg: true }).toBuffer();
       outExt = ".jpg";
     } else {

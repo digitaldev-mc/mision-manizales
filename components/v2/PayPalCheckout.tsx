@@ -4,7 +4,8 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useEffect, useRef, useState } from "react";
 
 type PayPalCheckoutProps = {
-  donationId: string;
+  donationId?: string;
+  orderId?: string;
   referenceCode: string;
   amountCOP: number;
   onSuccess: (referenceCode: string) => void;
@@ -13,6 +14,7 @@ type PayPalCheckoutProps = {
 
 export function PayPalCheckout({
   donationId,
+  orderId,
   referenceCode,
   amountCOP,
   onSuccess,
@@ -74,7 +76,7 @@ export function PayPalCheckout({
           <PayPalButtons
             disabled={busy}
             style={{ layout: "vertical", color: "gold", shape: "rect", label: "paypal", height: 48 }}
-            forceReRender={[donationId, referenceCode]}
+            forceReRender={[donationId, orderId, referenceCode]}
             onInit={() => setReady(true)}
             createOrder={async () => {
               setBusy(true);
@@ -82,7 +84,7 @@ export function PayPalCheckout({
                 const res = await fetch("/api/pagos/paypal/create-order", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ donationId }),
+                  body: JSON.stringify(orderId ? { orderId } : { donationId }),
                 });
                 const data = (await res.json()) as { orderID?: string; error?: string };
                 if (!res.ok || !data.orderID) {
@@ -105,7 +107,9 @@ export function PayPalCheckout({
                 const res = await fetch("/api/pagos/paypal/capture-order", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ orderID, donationId }),
+                  body: JSON.stringify(
+                    orderId ? { orderID, orderId } : { orderID, donationId },
+                  ),
                 });
                 const body = (await res.json()) as { referenceCode?: string; error?: string };
                 if (!res.ok) throw new Error(body.error ?? "No se pudo confirmar el pago");
