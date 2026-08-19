@@ -1,4 +1,3 @@
-import { existsSync } from "fs";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
@@ -23,20 +22,16 @@ function resolveImageExtension(file: File): string {
   }
 
   throw new Error(
-    "Formato no reconocido. Usa JPG, PNG, WebP, GIF, SVG, AVIF, BMP, TIFF, ICO o HEIC.",
+    "Formato no reconocido. Usa JPEG, JPG, PNG, WebP, GIF, SVG, AVIF, BMP, TIFF, ICO o HEIC.",
   );
 }
 
 function uploadDirs(folder: string): string[] {
   const safeFolder = folder.replace(/[^a-z0-9-_]/gi, "");
-  const dirs = [path.join(process.cwd(), "public", "uploads", safeFolder)];
-
-  const standaloneRoot = path.join(process.cwd(), ".next", "standalone", "public", "uploads", safeFolder);
-  if (existsSync(path.join(process.cwd(), ".next", "standalone"))) {
-    dirs.push(standaloneRoot);
-  }
-
-  return dirs;
+  return [
+    path.join(process.cwd(), "public", "uploads", safeFolder),
+    path.join(process.cwd(), ".next", "standalone", "public", "uploads", safeFolder),
+  ];
 }
 
 export async function savePublicUpload(

@@ -7,12 +7,14 @@ type AdminImageUploadProps = {
   name?: string;
   label?: string;
   defaultUrl?: string;
+  required?: boolean;
 };
 
 export function AdminImageUpload({
   name = "imageUrl",
   label = "Imagen",
   defaultUrl = "",
+  required = false,
 }: AdminImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState(defaultUrl);
@@ -51,10 +53,11 @@ export function AdminImageUpload({
             type="file"
             name="file"
             accept={IMAGE_ACCEPT}
+            required={required}
             onChange={(e) => onFileChange(e.target.files?.[0])}
           />
           <p style={{ fontSize: "0.78rem", color: "#7a8896", marginTop: 6 }}>
-            {IMAGE_FORMATS_LABEL} · se sube al guardar
+            {IMAGE_FORMATS_LABEL}
           </p>
         </div>
       </div>

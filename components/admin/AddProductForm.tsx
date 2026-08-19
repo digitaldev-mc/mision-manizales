@@ -2,18 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { addProductAction } from "@/app/(admin)/admin/(panel)/actions";
 import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 
 export function AddProductForm() {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [busy, setBusy] = useState(false);
   const [uploadKey, setUploadKey] = useState(0);
 
   useEffect(() => {
     if (!error) return;
-    const t = setTimeout(() => setError(""), 8000);
+    const t = setTimeout(() => setError(""), 10000);
     return () => clearTimeout(t);
   }, [error]);
 
@@ -21,33 +21,36 @@ export function AddProductForm() {
     e.preventDefault();
     setBusy(true);
     setError("");
+    setSuccess("");
 
     try {
       const form = e.currentTarget;
-      const fd = new FormData(form);
-      const file = fd.get("file");
+      const fileInput = form.querySelector<HTMLInputElement>('input[type="file"]');
+      const file = fileInput?.files?.[0];
 
-      if (file instanceof File && file.size > 0) {
-        const uploadBody = new FormData();
-        uploadBody.append("file", file);
-        uploadBody.append("folder", "productos");
-        const uploadRes = await fetch("/api/admin/upload", { method: "POST", body: uploadBody });
-        const uploadData = (await uploadRes.json()) as { url?: string; error?: string };
-        if (!uploadRes.ok || !uploadData.url) {
-          throw new Error(uploadData.error ?? "No se pudo subir la imagen");
-        }
-        fd.set("imageUrl", uploadData.url);
+      if (!file || file.size === 0) {
+        throw new Error("Selecciona una imagen (JPEG, JPG, PNG, etc.)");
       }
 
-      fd.delete("file");
+      const body = new FormData();
+      body.append("name", String(new FormData(form).get("name") ?? ""));
+      body.append("priceCOP", String(new FormData(form).get("priceCOP") ?? ""));
+      body.append("description", String(new FormData(form).get("description") ?? ""));
+      body.append("file", file);
 
-      const name = String(fd.get("name") ?? "").trim();
-      const priceCOP = Number(fd.get("priceCOP"));
-      if (!name || !Number.isFinite(priceCOP) || priceCOP <= 0) {
-        throw new Error("Nombre y precio válidos son obligatorios");
+      const res = await fetch("/api/admin/products", { method: "POST", body });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        imageUrl?: string;
+        error?: string;
+        product?: { name: string };
+      };
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error ?? "No se pudo crear el producto");
       }
 
-      await addProductAction(fd);
+      setSuccess(`Producto "${data.product?.name ?? ""}" creado con imagen ${data.imageUrl ?? ""}`);
       form.reset();
       setUploadKey((k) => k + 1);
       router.refresh();
@@ -59,7 +62,7 @@ export function AddProductForm() {
   }
 
   return (
-    <form className="admin-form-grid" onSubmit={onSubmit}>
+    <form className="admin-form-grid" onSubmit={onSubmit} encType="multipart/form-data">
       <div className="field">
         <label htmlFor="name">Nombre</label>
         <input id="name" name="name" required placeholder="Empanada solidaria" disabled={busy} />
@@ -87,7 +90,10 @@ export function AddProductForm() {
         />
       </div>
       <div className="field full" key={uploadKey}>
-        <AdminImageUpload name="imageUrl" label="Imagen del producto" />
+        <AdminImageUpload name="imageUrl" label="Imagen del producto (obligatoria)" required />
+        <p style={{ fontSize: "0.78rem", color: "#7a8896", marginTop: 6 }}>
+          Acepta JPEG/JPG, PNG, WebP y más. Se optimiza a JPG al subir.
+        </p>
       </div>
       {error ? (
         <div className="full">
@@ -96,9 +102,14 @@ export function AddProductForm() {
           </p>
         </div>
       ) : null}
+      {success ? (
+        <div className="full">
+          <p style={{ color: "#2d6a4f", fontSize: "0.88rem" }}>{success}</p>
+        </div>
+      ) : null}
       <div className="full">
         <button type="submit" className="btn btn-primary" disabled={busy}>
-          {busy ? "Guardando…" : "Crear producto"}
+          {busy ? "Subiendo imagen y guardando…" : "Crear producto"}
         </button>
       </div>
     </form>

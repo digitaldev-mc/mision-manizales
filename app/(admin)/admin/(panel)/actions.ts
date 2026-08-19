@@ -214,7 +214,7 @@ export async function addProductAction(formData: FormData) {
   let imageUrl = String(formData.get("imageUrl") ?? "").trim();
 
   const file = await readUploadFile(formData, "file");
-  if (file) imageUrl = await savePublicUpload(file, "productos");
+  if (file) imageUrl = await savePublicUpload(file, "productos", { optimize: "product" });
   if (!imageUrl) imageUrl = "/assets/empanada-foto.png";
 
   if (!name || !Number.isFinite(priceCOP)) throw new Error("Datos inválidos");

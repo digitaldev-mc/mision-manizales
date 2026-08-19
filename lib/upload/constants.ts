@@ -2,7 +2,7 @@ export const IMAGE_ACCEPT =
   "image/jpeg,image/png,image/webp,image/gif,image/svg+xml,image/avif,image/bmp,image/tiff,image/x-icon,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.gif,.svg,.avif,.bmp,.tif,.tiff,.ico,.heic,.heif";
 
 export const IMAGE_FORMATS_LABEL =
-  "JPG, PNG, WebP, GIF, SVG, AVIF, BMP, TIFF, ICO, HEIC · máx. 8 MB";
+  "JPEG, JPG, PNG, WebP, GIF, SVG, AVIF, BMP, TIFF, ICO, HEIC · máx. 8 MB";
 
 /** Tipos MIME → extensión de salida (normalizada para web). */
 export const MIME_TO_EXT: Record<string, string> = {

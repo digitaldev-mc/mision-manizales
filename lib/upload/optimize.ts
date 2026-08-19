@@ -8,10 +8,23 @@ const PROFILES: Record<
 > = {
   carousel: { maxWidth: 1920, maxHeight: 1200, quality: 82 },
   logo: { maxWidth: 800, maxHeight: 400, quality: 88 },
-  product: { maxWidth: 1200, maxHeight: 1200, quality: 85 },
+  product: { maxWidth: 1200, maxHeight: 1200, quality: 86 },
 };
 
-const RASTER_EXT = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".tif", ".tiff", ".bmp", ".heic", ".heif"]);
+const RASTER_EXT = new Set([
+  ".jpg",
+  ".jpeg",
+  ".jpe",
+  ".jfif",
+  ".png",
+  ".webp",
+  ".avif",
+  ".tif",
+  ".tiff",
+  ".bmp",
+  ".heic",
+  ".heif",
+]);
 
 export function optimizeProfileForFolder(folder: string): OptimizeProfile {
   if (folder === "historia") return "carousel";
@@ -20,33 +33,53 @@ export function optimizeProfileForFolder(folder: string): OptimizeProfile {
   return "none";
 }
 
+function normalizeExt(ext: string): string {
+  if (ext === ".jpeg" || ext === ".jpe" || ext === ".jfif") return ".jpg";
+  return ext;
+}
+
 export async function optimizeImageBuffer(
   input: Buffer,
   ext: string,
   profile: OptimizeProfile,
 ): Promise<{ buffer: Buffer; ext: string }> {
-  if (profile === "none" || ext === ".svg" || ext === ".gif" || ext === ".ico") {
-    return { buffer: input, ext };
+  const normalizedExt = normalizeExt(ext.toLowerCase());
+
+  if (profile === "none" || normalizedExt === ".svg" || normalizedExt === ".gif" || normalizedExt === ".ico") {
+    return { buffer: input, ext: normalizedExt };
   }
 
-  if (!RASTER_EXT.has(ext)) {
-    return { buffer: input, ext };
+  if (!RASTER_EXT.has(normalizedExt) && !RASTER_EXT.has(ext.toLowerCase())) {
+    return { buffer: input, ext: normalizedExt };
   }
 
   const cfg = PROFILES[profile];
   try {
-    const optimized = await sharp(input, { failOn: "none" })
+    let pipeline = sharp(input, { failOn: "none" })
       .rotate()
-      .resize(cfg.maxWidth, cfg.maxHeight, { fit: "inside", withoutEnlargement: true })
-      .webp({ quality: cfg.quality, effort: 4 })
-      .toBuffer();
+      .resize(cfg.maxWidth, cfg.maxHeight, { fit: "inside", withoutEnlargement: true });
 
-    if (optimized.length >= input.length * 0.98 && ext !== ".heic" && ext !== ".heif") {
-      return { buffer: input, ext };
+    let optimized: Buffer;
+    let outExt: string;
+
+    if (profile === "product") {
+      optimized = await pipeline.jpeg({ quality: cfg.quality, mozjpeg: true }).toBuffer();
+      outExt = ".jpg";
+    } else {
+      optimized = await pipeline.webp({ quality: cfg.quality, effort: 4 }).toBuffer();
+      outExt = ".webp";
     }
 
-    return { buffer: optimized, ext: ".webp" };
+    if (
+      optimized.length >= input.length * 0.98 &&
+      normalizedExt !== ".heic" &&
+      normalizedExt !== ".heif"
+    ) {
+      return { buffer: input, ext: normalizedExt === ".jpg" ? ".jpg" : normalizedExt };
+    }
+
+    return { buffer: optimized, ext: outExt };
   } catch {
-    return { buffer: input, ext };
+    return { buffer: input, ext: normalizedExt === ".jpg" ? ".jpg" : normalizedExt };
   }
 }
