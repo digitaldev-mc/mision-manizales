@@ -9,6 +9,7 @@ import {
   GAUGE_FILL,
   gaugeFillFromPercent,
 } from "./constants";
+import { Empanadometro } from "./Empanadometro";
 import { animateCount } from "./useScrollReveal";
 
 type ThermometerData = {
@@ -83,64 +84,63 @@ export function EmpanadaGauge() {
 
         <div className="termo-card reveal-scale">
           <div className="termo-tube-wrap">
-            <div className="gauge-svg-wrap">
-              <svg viewBox={EMPANADA_VIEWBOX} xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <clipPath id="empanadaClip" clipPathUnits="userSpaceOnUse">
-                    <path d={EMPANADA_PATH} />
-                  </clipPath>
-                  <linearGradient id="fillGrad" x1="0" y1="1" x2="0" y2="0">
-                    <stop id="fillStopA" offset="0%" stopColor={stopA} />
-                    <stop id="fillStopB" offset="100%" stopColor={stopB} />
-                  </linearGradient>
-                </defs>
+            <div className="termometros-wrap">
+              <div className="gauge-svg-wrap">
+                <svg viewBox={EMPANADA_VIEWBOX} xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <clipPath id="empanadaClip" clipPathUnits="userSpaceOnUse">
+                      <path d={EMPANADA_PATH} />
+                    </clipPath>
+                    <linearGradient id="fillGrad" x1="0" y1="1" x2="0" y2="0">
+                      <stop id="fillStopA" offset="0%" stopColor={stopA} />
+                      <stop id="fillStopB" offset="100%" stopColor={stopB} />
+                    </linearGradient>
+                  </defs>
 
-                <path
-                  className="emp-outline"
-                  d={EMPANADA_PATH}
-                  fill="var(--amarillo-opaco)"
-                  stroke="var(--terracota)"
-                  strokeWidth="6"
-                />
-
-                <g clipPath="url(#empanadaClip)">
-                  <rect
-                    id="gauge-fill-rect"
-                    x={GAUGE_FILL.x}
-                    y={fillY}
-                    width={GAUGE_FILL.width}
-                    height={fillH}
-                    fill="url(#fillGrad)"
+                  <path
+                    d={EMPANADA_PATH}
+                    fill="var(--amarillo-opaco)"
+                    stroke="var(--terracota)"
+                    strokeWidth="6"
                   />
-                  <rect
-                    id="gauge-shine"
-                    x={GAUGE_FILL.x}
-                    y={shineY}
-                    width={GAUGE_FILL.width}
-                    height="6"
-                    fill="#fff6d8"
-                    opacity="0.65"
-                  />
-                </g>
 
-                <path
-                  d={EMPANADA_PATH}
-                  fill="none"
-                  stroke="var(--terracota)"
-                  strokeWidth="6"
-                />
-              </svg>
-              {[0, 1, 2].map((i) => (
-                <div
-                  key={`${sparkKey}-${i}`}
-                  className="gauge-sparkle go"
-                  style={{
-                    ["--dx" as string]: `${(i - 1) * 22}px`,
-                    left: `${46 + i * 6}%`,
-                  }}
-                />
-              ))}
+                  <g clipPath="url(#empanadaClip)">
+                    <rect
+                      id="gauge-fill-rect"
+                      x={GAUGE_FILL.x}
+                      y={fillY}
+                      width={GAUGE_FILL.width}
+                      height={fillH}
+                      fill="url(#fillGrad)"
+                    />
+                    <rect
+                      id="gauge-shine"
+                      x={GAUGE_FILL.x}
+                      y={shineY}
+                      width={GAUGE_FILL.width}
+                      height="6"
+                      fill="#fff6d8"
+                      opacity="0.65"
+                    />
+                  </g>
+
+                  <path d={EMPANADA_PATH} fill="none" stroke="var(--terracota)" strokeWidth="6" />
+                </svg>
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={`${sparkKey}-${i}`}
+                    className="gauge-sparkle go"
+                    style={{
+                      ["--dx" as string]: `${(i - 1) * 22}px`,
+                      left: `${46 + i * 6}%`,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <Empanadometro raised={raised} goal={goal} />
             </div>
+
             <span className="termo-goal-label">
               Meta: <strong className="mono">{fmtCOPShort(goal)}</strong>
             </span>
