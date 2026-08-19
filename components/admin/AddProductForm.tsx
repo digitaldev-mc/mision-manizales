@@ -1,11 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useTransition } from "react";
 import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
+import { parseJsonResponse, resetFormElement } from "@/lib/admin/client-fetch";
 
-export function AddProductForm() {
+type CreatedProduct = {
+  id: string;
+  name: string;
+  slug: string;
+  priceCOP: number;
+  imageUrl: string;
+  thermometerPercent: number;
+  stock: number;
+  active: boolean;
+  soldOut: boolean;
+};
+
+export function AddProductForm({ onCreated }: { onCreated?: (product: CreatedProduct) => void }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [busy, setBusy] = useState(false);
@@ -17,44 +31,48 @@ export function AddProductForm() {
     return () => clearTimeout(t);
   }, [error]);
 
+  useEffect(() => {
+    if (!success) return;
+    const t = setTimeout(() => setSuccess(""), 8000);
+    return () => clearTimeout(t);
+  }, [success]);
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
+    const fileInput = form.querySelector<HTMLInputElement>('input[type="file"]');
+    const file = fileInput?.files?.[0];
+
+    if (!file || file.size === 0) {
+      setError("Selecciona una imagen (JPEG, JPG, PNG, etc.)");
+      return;
+    }
+
     setBusy(true);
     setError("");
     setSuccess("");
 
+    const body = new FormData(form);
+    body.set("file", file);
+
     try {
-      const form = e.currentTarget;
-      const fileInput = form.querySelector<HTMLInputElement>('input[type="file"]');
-      const file = fileInput?.files?.[0];
-
-      if (!file || file.size === 0) {
-        throw new Error("Selecciona una imagen (JPEG, JPG, PNG, etc.)");
-      }
-
-      const body = new FormData();
-      body.append("name", String(new FormData(form).get("name") ?? ""));
-      body.append("priceCOP", String(new FormData(form).get("priceCOP") ?? ""));
-      body.append("description", String(new FormData(form).get("description") ?? ""));
-      body.append("thermometerPercent", String(new FormData(form).get("thermometerPercent") ?? "20"));
-      body.append("file", file);
-
       const res = await fetch("/api/admin/products", { method: "POST", body });
-      const data = (await res.json()) as {
+      const data = await parseJsonResponse<{
         ok?: boolean;
         imageUrl?: string;
         error?: string;
-        product?: { name: string };
-      };
+        product?: CreatedProduct;
+      }>(res);
 
-      if (!res.ok || !data.ok) {
+      if (!res.ok || !data.ok || !data.product) {
         throw new Error(data.error ?? "No se pudo crear el producto");
       }
 
-      setSuccess(`Producto "${data.product?.name ?? ""}" creado con imagen ${data.imageUrl ?? ""}`);
-      form.reset();
+      setSuccess(`Producto "${data.product.name}" creado correctamente.`);
+      resetFormElement(form);
       setUploadKey((k) => k + 1);
-      router.refresh();
+      onCreated?.(data.product);
+      startTransition(() => router.refresh());
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al crear el producto");
     } finally {
@@ -62,11 +80,13 @@ export function AddProductForm() {
     }
   }
 
+  const disabled = busy || isPending;
+
   return (
     <form className="admin-form-grid" onSubmit={onSubmit} encType="multipart/form-data">
       <div className="field">
         <label htmlFor="name">Nombre</label>
-        <input id="name" name="name" required placeholder="Empanada solidaria" disabled={busy} />
+        <input id="name" name="name" required placeholder="Empanada solidaria" disabled={disabled} />
       </div>
       <div className="field">
         <label htmlFor="priceCOP">Precio (COP)</label>
@@ -77,7 +97,7 @@ export function AddProductForm() {
           min={1000}
           step={500}
           required
-          disabled={busy}
+          disabled={disabled}
         />
       </div>
       <div className="field">
@@ -91,7 +111,7 @@ export function AddProductForm() {
           step={1}
           defaultValue={20}
           required
-          disabled={busy}
+          disabled={disabled}
         />
       </div>
       <div className="field full">
@@ -101,7 +121,7 @@ export function AddProductForm() {
           name="description"
           rows={3}
           placeholder="Detalle del producto"
-          disabled={busy}
+          disabled={disabled}
         />
       </div>
       <div className="field full" key={uploadKey}>
@@ -123,8 +143,8 @@ export function AddProductForm() {
         </div>
       ) : null}
       <div className="full">
-        <button type="submit" className="btn btn-primary" disabled={busy}>
-          {busy ? "Subiendo imagen y guardando…" : "Crear producto"}
+        <button type="submit" className="btn btn-primary" disabled={disabled}>
+          {disabled ? "Subiendo imagen y guardando…" : "Crear producto"}
         </button>
       </div>
     </form>

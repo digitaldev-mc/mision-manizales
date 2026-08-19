@@ -1,17 +1,14 @@
 import { prisma } from "@/lib/prisma";
-import { HistoriaImageForm } from "@/components/admin/HistoriaImageForm";
-import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
+import { HistoriaGalleryPanel } from "@/components/admin/HistoriaGalleryPanel";
 import {
   addStoryAction,
   addEventAction,
-  addPartnerAction,
   deleteStoryAction,
   deleteEventAction,
-  deletePartnerAction,
-  deleteHistoriaImageAction,
   saveHistoriaTagAction,
   getHistoriaGalleryData,
 } from "../actions";
+import { PartnersPanel } from "@/components/admin/PartnersPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -41,24 +38,7 @@ export default async function AdminContenidoPage() {
             </button>
           </div>
         </form>
-        <HistoriaImageForm />
-        <div className="admin-row-list" style={{ marginTop: 20 }}>
-          {historia.images.map((url) => (
-            <div className="admin-item" key={url}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={url} alt="" style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 8 }} />
-                <code style={{ fontSize: "0.75rem" }}>{url}</code>
-              </div>
-              <form action={deleteHistoriaImageAction}>
-                <input type="hidden" name="imageUrl" value={url} />
-                <button type="submit" className="btn btn-danger btn-sm">
-                  Quitar
-                </button>
-              </form>
-            </div>
-          ))}
-        </div>
+        <HistoriaGalleryPanel initialImages={historia.images} />
       </div>
 
       <div className="admin-panel-card">
@@ -149,39 +129,14 @@ export default async function AdminContenidoPage() {
 
       <div className="admin-panel-card">
         <h2>Aliados</h2>
-        <form action={addPartnerAction} className="admin-form-grid" encType="multipart/form-data">
-          <div className="field">
-            <label htmlFor="partner-name">Nombre</label>
-            <input id="partner-name" name="name" required />
-          </div>
-          <AdminImageUpload name="logoUrl" label="Logo del aliado" />
-          <div className="full">
-            <button type="submit" className="btn btn-primary btn-sm">
-              Agregar aliado
-            </button>
-          </div>
-        </form>
-        <div className="admin-row-list" style={{ marginTop: 20 }}>
-          {partners.map((p) => (
-            <div className="admin-item" key={p.id}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                {p.logoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.logoUrl} alt="" style={{ width: 56, height: 40, objectFit: "contain" }} />
-                ) : null}
-                <div>
-                  <strong>{p.name}</strong>
-                  <div className="meta">{p.active ? "Visible" : "Oculto"}</div>
-                </div>
-              </div>
-              <form action={deletePartnerAction.bind(null, p.id)}>
-                <button type="submit" className="btn btn-danger btn-sm">
-                  Eliminar
-                </button>
-              </form>
-            </div>
-          ))}
-        </div>
+        <PartnersPanel
+          initialPartners={partners.map((p) => ({
+            id: p.id,
+            name: p.name,
+            logoUrl: p.logoUrl,
+            active: p.active,
+          }))}
+        />
       </div>
     </>
   );
